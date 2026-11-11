@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Registration - SmartSched AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .registration-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        .form-group small {
+            display: block;
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .domain-preview {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .domain-preview.show {
+            display: block;
+        }
+
+        .domain-preview h4 {
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .domain-tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 5px 5px 5px 0;
+        }
+
+        .domain-tag.invalid {
+            background: #e74c3c;
+        }
+
+        .password-requirements {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        .password-requirements h4 {
+            color: #333;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .password-requirements ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .password-requirements li {
+            color: #666;
+            font-size: 12px;
+            padding: 3px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .password-requirements li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-register:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="registration-container">
+        <div class="header">
+            <h1>🎓 Admin Registration</h1>
+            <p>Set up your administrator account and configure teacher email domains</p>
+        </div>
+
+        <div id="alertBox" class="alert"></div>
+
+        <form id="adminRegistrationForm">
+            <div class="form-group">
+                <label for="username">Username *</label>
+                <input type="text" id="username" name="username" required minlength="3"
+                    placeholder="Enter username (min 3 characters)">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" required placeholder="admin@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" placeholder="Your full name">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" name="password" required placeholder="Enter a strong password">
+                <div class="password-requirements">
+                    <h4>Password Requirements:</h4>
+                    <ul>
+                        <li>At least 8 characters long</li>
+                        <li>Contains uppercase and lowercase letters</li>
+                        <li>Contains at least one number</li>
+                        <li>Contains at least one special character</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password *</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required
+                    placeholder="Re-enter your password">
+            </div>
+
+            <div class="form-group">
+                <label for="instituteName">Institute Name *</label>
+                <input type="text" id="instituteName" name="instituteName" required
+                    placeholder="e.g. Bangalore Institute of Technology">
+            </div>
+
+            <div class="form-group">
+                <label for="instituteCode">Institute Code (Auto-Generated) *</label>
+                <input type="text" id="instituteCode" name="instituteCode" required placeholder="e.g. BIT">
+                <small>Used for generating teacher codes (e.g. BIT001)</small>
+            </div>
+
+            <div class="form-group">
+                <label for="allowedDomains">Allowed Email Domains *</label>
+                <textarea id="allowedDomains" name="allowedDomains" required
+                    placeholder="Enter email domains separated by commas&#10;Example: @college.ac.in, @university.edu, @institute.org"></textarea>
+                <small>Teachers with these email domains will be automatically verified</small>
+
+                <div id="domainPreview" class="domain-preview">
+                    <h4>Domains to be added:</h4>
+                    <div id="domainTags"></div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-register" id="registerBtn">
+                Register Admin Account
+            </button>
+        </form>
+
+        <div class="loading" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #666;">Creating admin account...</p>
+        </div>
+
+        <div class="login-link">
+            Already have an account? <a href="index.html">Login here</a>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000';
+
+        // Domain preview functionality
+        const allowedDomainsInput = document.getElementById('allowedDomains');
+        const domainPreview = document.getElementById('domainPreview');
+        const domainTags = document.getElementById('domainTags');
+
+        allowedDomainsInput.addEventListener('input', function () {
+            const input = this.value.trim();
+
+            if (!input) {
+                domainPreview.classList.remove('show');
+                return;
+            }
+
+            const domains = input.split(/[,\n]+/).map(d => d.trim()).filter(d => d);
+
+            if (domains.length === 0) {
+                domainPreview.classList.remove('show');
+                return;
+            }
+
+            domainPreview.classList.add('show');
+            domainTags.innerHTML = '';
+
+            domains.forEach(domain => {
+                const tag = document.createElement('span');
+                const isValid = validateDomainFormat(domain);
+                tag.className = isValid ? 'domain-tag' : 'domain-tag invalid';
+                tag.textContent = normalizeDomain(domain);
+                domainTags.appendChild(tag);
+            });
+        });
+
+        function normalizeDomain(domain) {
+            domain = domain.trim().toLowerCase();
+            if (!domain.startsWith('@')) {
+                domain = '@' + domain;
+            }
+            return domain;
+        }
+
+        function validateDomainFormat(domain) {
+            domain = normalizeDomain(domain);
+
+            // Must start with @
+            if (!domain.startsWith('@')) return false;
+
+            // Must have at least one dot
+            if (!domain.includes('.', 1)) return false;
+
+            // Must not have consecutive dots
+            if (domain.includes('..')) return false;
+
+            // Must not end with dot
+            if (domain.endsWith('.')) return false;
+
+            // Must be at least 4 characters (@x.y)
+            if (domain.length < 4) return false;
+
+            // Check for valid characters
+            const validPattern = /^@[a-z0-9.-]+$/;
+            return validPattern.test(domain);
+        }
+
+        // Institute Code Auto-generation
+        const instituteNameInput = document.getElementById('instituteName');
+        const instituteCodeInput = document.getElementById('instituteCode');
+
+        instituteNameInput.addEventListener('input', function () {
+            const name = this.value;
+            if (name) {
+                // Words to exclude (articles & prepositions)
+                const excludedWords = new Set(['a', 'an', 'the', 'of', 'for', 'in', 'on', 'at', 'by', 'with', 'and', '&']);
+
+                // Generate acronym: Split by space, filter out excluded words, take first letter of remaining words
+                const code = name.split(/[\s-]+/) // Split by space or hyphen
+                    .filter(word => word && !excludedWords.has(word.toLowerCase())) // Filter empty & excluded
+                    .map(word => word[0]) // Take first letter
+                    .join('')
+                    .toUpperCase()
+                    .replace(/[^A-Z]/g, ''); // Remove non-letters if any
+
+                instituteCodeInput.value = code;
+            } else {
+                instituteCodeInput.value = '';
+            }
+        });
+
+        // Form submission
+        const form = document.getElementById('adminRegistrationForm');
+        const alertBox = document.getElementById('alertBox');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const registerBtn = document.getElementById('registerBtn');
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // Clear previous alerts
+            alertBox.className = 'alert';
+            alertBox.textContent = '';
+
+            // Get form values
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const fullName = document.getElementById('fullName').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const allowedDomains = document.getElementById('allowedDomains').value.trim();
+            const instituteName = document.getElementById('instituteName').value.trim();
+            const instituteCode = document.getElementById('instituteCode').value.trim();
+
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match', 'error');
+                return;
+            }
+
+            // Validate domains
+            const domains = allowedDomains.split(/[,\n]+/).map(d => d.trim()).filter(d => d);
+            if (domains.length === 0) {
+                showAlert('Please enter at least one email domain', 'error');
+                return;
+            }
+
+            const invalidDomains = domains.filter(d => !validateDomainFormat(d));
+            if (invalidDomains.length > 0) {
+                showAlert(`Invalid domain format: ${invalidDomains.join(', ')}`, 'error');
+                return;
+            }
+
+            // Show loading
+            form.style.display = 'none';
+            loadingIndicator.classList.add('show');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/admin/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username,
+                        email,
+                        full_name: fullName,
+                        password,
+                        allowed_domains: allowedDomains,
+                        institute_name: instituteName,
+                        institute_code: instituteCode
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert(
+                        `Success! Admin account created. ${data.domains_added.length} domain(s) added: ${data.domains_added.join(', ')}`,
+                        'success'
+                    );
+
+                    if (data.warning) {
+                        setTimeout(() => {
+                            showAlert(data.warning, 'warning');
+                        }, 3000);
+                    }
+
+                    // Redirect to login after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 3000);
+                } else {
+                    let errorMessage = data.error || 'Registration failed';
+
+                    if (data.details && Array.isArray(data.details)) {
+                        errorMessage += ':\n' + data.details.join('\n');
+                    }
+
+                    showAlert(errorMessage, 'error');
+                    form.style.display = 'block';
+                    loadingIndicator.classList.remove('show');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showAlert('Network error. Please check if the server is running.', 'error');
+                form.style.display = 'block';
+                loadingIndicator.classList.remove('show');
+            }
+        });
+
+        function showAlert(message, type) {
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type} show`;
+            alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-mode">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - SmartSchedAI</title>
+
+    <!-- Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Core Theme Variables */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --neon-blue: #00f2fe;
+            --neon-purple: #667eea;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f172a;
+            color: #ffffff;
+            margin: 0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Fluid Animation Canvas */
+        #waveCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Navigation */
+        .navbar-glass {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        /* Typography & Gradients */
+        .text-gradient {
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .text-gradient-purple {
+            background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Timetable Styling */
+        .tt-table-container {
+            overflow-x: auto;
+            border-radius: 1rem;
+        }
+
+        .tt-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 800px;
+        }
+
+        .tt-table th {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .tt-table td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.8);
+            transition: background 0.2s;
+        }
+
+        .tt-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .tt-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Tags and Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-room {
+            background: rgba(99, 102, 241, 0.1);
+            color: #818cf8;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .badge-subject {
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        /* Buttons */
+        .btn-modern {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+            font-weight: 500;
+        }
+
+        .btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+            filter: brightness(1.1);
+        }
+
+        .btn-outline-modern {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.5rem 1.25rem;
+            border-radius: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .btn-outline-modern:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-enter {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Fluid Wave Background -->
+    <canvas id="waveCanvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="navbar-glass">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                        <i class="fas fa-brain text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold tracking-tight text-white block leading-none">SmartSched<span
+                                class="text-indigo-400">AI</span></span>
+                        <span class="text-xs text-slate-400 font-medium tracking-wide">TEACHER PORTAL</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-6">
+                    <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+                        <span id="dateDisplay" class="opacity-75"></span>
+                    </div>
+
+                    <div class="h-8 w-px bg-slate-700 mx-2 hidden md:block"></div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="text-right hidden sm:block">
+                            <div id="teacherNameDisplay" class="text-sm font-semibold text-white">Professor</div>
+                            <div class="text-xs text-slate-400">Faculty Member</div>
+                        </div>
+                        <div
+                            class="w-10 h-10 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center text-slate-300">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <button id="logoutBtn"
+                            class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-2.5 rounded-lg transition-colors border border-slate-700"
+                            title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                        <button id="deleteAccountBtn"
+                            class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 p-2.5 rounded-lg transition-colors ml-2"
+                            title="Delete Account">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
+
+        <!-- Welcome Section -->
+        <div class="mb-10 animate-enter">
+            <h1 class="text-4xl font-bold mb-2"><span id="welcomeMessage" class="text-gradient">Welcome back</span></h1>
+            <p class="text-slate-400 text-lg">Here's your schedule overview for today</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 animate-enter" style="animation-delay: 0.1s;">
+            <!-- Stat 1 -->
+            <div class="glass-card p-6 flex items-center gap-5">
+                <div
+                    class="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 text-2xl border border-indigo-500/20">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div>
+                    <h3 id="totalClasses" class="text-3xl font-bold text-white mb-1">0</h3>
+                    <p class="text-slate-400 text-sm font-medium">Weekly Classes</p>
+                </div>
+            </div>
+
+            <!-- Stat 2 -->
+            <div class="glass-card p-6 flex items-center gap-5">
+                <div
+                    class="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400 text-2xl border border-purple-500/20">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                    <h3 id="hoursCount" class="text-3xl font-bold text-white mb-1">0</h3>
+                    <p class="text-slate-400 text-sm font-medium">Teaching Hours</p>
+                </div>
+            </div>
+
+            <!-- Stat 3 -->
+            <div class="glass-card p-6 flex items-center gap-5">
+                <div
+                    class="w-14 h-14 rounded-2xl bg-pink-500/10 flex items-center justify-center text-pink-400 text-2xl border border-pink-500/20">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div>
+                    <h3 id="subjectCount" class="text-3xl font-bold text-white mb-1">0</h3>
+                    <p class="text-slate-400 text-sm font-medium">Active Subjects</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Split Layout: Upcoming & Timetable -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-enter" style="animation-delay: 0.2s;">
+
+            <!-- Left Column: Upcoming Class (1/3 width) -->
+            <div class="lg:col-span-1">
+                <h2 class="text-xl font-semibold text-white mb-5 flex items-center gap-2">
+                    <span class="w-1 h-6 bg-gradient-to-b from-indigo-400 to-purple-500 rounded-full block"></span>
+                    Now & Next
+                </h2>
+
+                <div id="upcomingClassContainer">
+                    <!-- Placeholder/Loading State -->
+                    <div class="glass-card p-6 text-center py-10">
+                        <div
+                            class="inline-flex w-16 h-16 rounded-full bg-slate-800/50 items-center justify-center mb-4 text-slate-500">
+                            <i class="fas fa-coffee text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-white mb-1">No classes right now</h3>
+                        <p class="text-slate-400 text-sm">You're free for the moment</p>
+                    </div>
+                </div>
+
+                <!-- Quick Actions (Optional addition) -->
+                <div class="mt-6 glass-card p-5">
+                    <h3 class="text-sm font-semibold text-slate-300 mb-4 uppercase tracking-wider text-xs">Quick Access
+                    </h3>
+                    <div class="space-y-3">
+                        <button
+                            class="w-full flex items-center justify-between p-3 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 transition-colors border border-slate-700/50 group">
+                            <div class="flex items-center gap-3">
+                                <span
+                                    class="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all">
+                                    <i class="fas fa-file-alt text-sm"></i>
+                                </span>
+                                <span class="text-slate-300 group-hover:text-white text-sm font-medium">View
+                                    Materials</span>
+                            </div>
+                            <i class="fas fa-chevron-right text-xs text-slate-600 group-hover:text-slate-400"></i>
+                        </button>
+                        <button
+                            class="w-full flex items-center justify-between p-3 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 transition-colors border border-slate-700/50 group">
+                            <div class="flex items-center gap-3">
+                                <span
+                                    class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-all">
+                                    <i class="fas fa-user-check text-sm"></i>
+                                </span>
+                                <span
+                                    class="text-slate-300 group-hover:text-white text-sm font-medium">Attendance</span>
+                            </div>
+                            <i class="fas fa-chevron-right text-xs text-slate-600 group-hover:text-slate-400"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Weekly Timetable (2/3 width) -->
+            <div class="lg:col-span-2">
+                <div class="flex items-center justify-between mb-5">
+                    <h2 class="text-xl font-semibold text-white flex items-center gap-2">
+                        <span class="w-1 h-6 bg-gradient-to-b from-purple-400 to-pink-500 rounded-full block"></span>
+                        Weekly Schedule
+                    </h2>
+                    <div class="text-sm text-slate-400 italic">
+                        <i class="fas fa-info-circle mr-1"></i> Current Semester
+                    </div>
+                </div>
+
+                <div class="glass-panel p-1">
+                    <div class="tt-table-container">
+                        <table class="tt-table" id="timetableTable">
+                            <thead>
+                                <tr>
+                                    <th>Day</th>
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>3</th>
+                                    <th>4</th>
+                                    <th class="text-center bg-slate-800/30">Break</th>
+                                    <th>5</th>
+                                    <th>6</th>
+                                    <th>7</th>
+                                </tr>
+                            </thead>
+                            <tbody id="timetableBody">
+                                <tr>
+                                    <td colspan="9" class="text-center py-12 text-slate-400">
+                                        <i class="fas fa-spinner fa-spin mr-2"></i> Loading timetable data...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script>
+        const API_BASE = 'http://localhost:5000';
+
+        // --- Fluid Wave Animation (Matches Admin Dashboard) ---
+        const waveCanvas = document.getElementById('waveCanvas');
+        const waveCtx = waveCanvas.getContext('2d');
+        let waveWidth, waveHeight;
+        let waveTime = 0;
+
+        function resizeWaveCanvas() {
+            waveWidth = window.innerWidth;
+            waveHeight = window.innerHeight;
+            waveCanvas.width = waveWidth;
+            waveCanvas.height = waveHeight;
+        }
+
+        window.addEventListener('resize', resizeWaveCanvas);
+        resizeWaveCanvas();
+
+        class FluidWave {
+            constructor(y, amplitude, length, speed, color) {
+                this.y = y;
+                this.amplitude = amplitude;
+                this.length = length;
+                this.speed = speed;
+                this.color = color;
+            }
+
+            draw(ctx, t) {
+                ctx.beginPath();
+                ctx.moveTo(0, this.y);
+                for (let i = 0; i < waveWidth; i++) {
+                    ctx.lineTo(i, this.y + Math.sin(i * this.length + t * this.speed) * this.amplitude);
+                }
+                ctx.lineTo(waveWidth, waveHeight);
+                ctx.lineTo(0, waveHeight);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+
+        const fluidWaves = [
+            new FluidWave(window.innerHeight * 0.5, 60, 0.003, 0.02, 'rgba(10, 25, 50, 0.5)'),
+            new FluidWave(window.innerHeight * 0.6, 50, 0.005, 0.03, 'rgba(20, 50, 100, 0.4)'),
+            new FluidWave(window.innerHeight * 0.7, 40, 0.007, 0.04, 'rgba(30, 80, 160, 0.2)'),
+            new FluidWave(window.innerHeight * 0.75, 30, 0.009, 0.05, 'rgba(0, 150, 255, 0.05)')
+        ];
+
+        function animateWaveCanvas() {
+            waveCtx.fillStyle = '#0f172a'; // Match body bg
+            waveCtx.fillRect(0, 0, waveWidth, waveHeight);
+            waveTime += 1;
+            fluidWaves.forEach(wave => {
+                if (wave.y < waveHeight * 0.4) wave.y = waveHeight * 0.5;
+                wave.draw(waveCtx, waveTime);
+            });
+            requestAnimationFrame(animateWaveCanvas);
+        }
+
+        // Start Wave Animation
+        animateWaveCanvas();
+
+        // --- Logic ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('authToken');
+            const userStr = localStorage.getItem('authUser');
+
+            if (!token || !userStr) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const user = JSON.parse(userStr);
+            if (user.role !== 'teacher') {
+                alert('Unauthorized Access');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Set Name & Header
+            document.getElementById('teacherNameDisplay').textContent = user.full_name || user.username || 'Professor';
+            // Also try to set welcome message name if possible
+            if (user.full_name) {
+                document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.salutation || ''} ${user.full_name.split(' ')[0]}`; // Just first name
+            }
+
+            // Set Date
+            const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+            document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-US', options);
+
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('authUser');
+                window.location.href = 'index.html';
+            });
+
+            // Delete Account
+            document.getElementById('deleteAccountBtn').addEventListener('click', async () => {
+                if (confirm('Are you sure you want to permanently delete your account? This cannot be undone.')) {
+                    try {
+                        const token = localStorage.getItem('authToken');
+                        const res = await fetch(`${API_BASE}/api/auth/me`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+
+                        if (res.ok) {
+                            alert('Account deleted successfully.');
+                            localStorage.removeItem('authToken');
+                            localStorage.removeItem('authUser');
+                            window.location.href = 'index.html';
+                        } else if (res.status === 401) {
+                            alert('Session expired or invalid token.');
+                            localStorage.removeItem('authToken');
+                            localStorage.removeItem('authUser');
+                            window.location.href = 'index.html';
+                        } else {
+                            const data = await res.json();
+                            alert(data.error || 'Failed to delete account.');
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert('An error occurred.');
+                    }
+                }
+            });
+
+            await fetchDashboardData();
+        });
+
+        async function fetchDashboardData() {
+            const token = localStorage.getItem('authToken');
+            const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+
+            try {
+                // 1. Timetable
+                const ttRes = await fetch(`${API_BASE}/api/teacher/timetable`, { headers });
+                if (ttRes.ok) {
+                    const ttData = await ttRes.json();
+
+                    // Update welcome message specifically if teacher name is available from backend
+                    if (ttData.teacher_name) {
+                        document.getElementById('welcomeMessage').textContent = `Welcome back, ${ttData.teacher_name}`;
+                    }
+
+                    renderTimetable(ttData.timetable);
+                } else {
+                    document.getElementById('timetableBody').innerHTML = '<tr><td colspan="9" class="text-center py-8 text-red-400">Failed to load schedule.</td></tr>';
+                }
+
+                // 2. Workload
+                const wlRes = await fetch(`${API_BASE}/api/teacher/workload`, { headers });
+                if (wlRes.ok) {
+                    const wlData = await wlRes.json();
+                    document.getElementById('totalClasses').textContent = wlData.total_hours;
+                    document.getElementById('hoursCount').textContent = wlData.total_hours;
+                    document.getElementById('subjectCount').textContent = wlData.subjects ? wlData.subjects.length : 0;
+                }
+
+                // 3. Upcoming
+                const upRes = await fetch(`${API_BASE}/api/teacher/upcoming`, { headers });
+                if (upRes.ok) {
+                    const upData = await upRes.json();
+                    renderUpcoming(upData);
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function renderTimetable(timetable) {
+            const tbody = document.getElementById('timetableBody');
+            tbody.innerHTML = '';
+
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+            const periods = [1, 2, 3, 4, 'Break', 5, 6, 7];
+
+            if (!timetable || timetable.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center py-12 text-slate-500">No classes scheduled yet.</td></tr>';
+                return;
+            }
+
+            days.forEach(day => {
+                const tr = document.createElement('tr');
+                let rowHtml = `<td class="font-semibold text-indigo-400 border-r border-white/5">${day.substring(0, 3)}</td>`;
+
+                periods.forEach(p => {
+                    if (p === 'Break') {
+                        rowHtml += `<td class="text-center bg-slate-800/30 border-x border-white/5"><i class="fas fa-mug-hot text-slate-600 text-xs"></i></td>`;
+                    } else {
+                        const entry = timetable.find(t => t.day === day && t.period === p);
+                        if (entry) {
+                            rowHtml += `
+                                <td class="group cursor-default relative">
+                                    <div class="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <div class="badge-subject truncate max-w-[120px]" title="${entry.subject}">${entry.subject}</div>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span class="text-xs text-slate-400">${entry.section}</span>
+                                        ${entry.room !== 'TBD' ? `<span class="badge badge-room px-1.5 py-0.5 text-[10px]">${entry.room}</span>` : ''}
+                                    </div>
+                                </td>
+                            `;
+                        } else {
+                            rowHtml += `<td><span class="text-slate-700">·</span></td>`;
+                        }
+                    }
+                });
+
+                tr.innerHTML = rowHtml;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderUpcoming(data) {
+            const container = document.getElementById('upcomingClassContainer');
+
+            if (!data.upcoming || data.upcoming.length === 0) {
+                container.innerHTML = `
+                <div class="glass-card p-6 text-center border border-dashed border-slate-700 bg-slate-800/20">
+                    <div class="inline-flex w-14 h-14 rounded-full bg-slate-800 items-center justify-center mb-4 text-emerald-400 shadow-lg shadow-emerald-500/10">
+                        <i class="fas fa-couch text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-white mb-1">Relax!</h3>
+                    <p class="text-slate-400 text-sm">No more classes scheduled for today.</p>
+                </div>`;
+                return;
+            }
+
+            const next = data.upcoming[0];
+            container.innerHTML = `
+                <div class="glass-card p-6 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl -mr-16 -mt-16 group-hover:bg-indigo-500/20 transition-colors"></div>
+                    
+                    <div class="flex justify-between items-start mb-4 relative z-10">
+                        <div class="bg-indigo-500/20 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full border border-indigo-500/20 uppercase tracking-wide">
+                            Current / Next
+                        </div>
+                        <span class="text-slate-400 text-xs font-mono"><i class="far fa-clock mr-1"></i> Period ${next.period}</span>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-white mb-1 leading-tight">${next.subject}</h3>
+                    <p class="text-slate-400 text-sm mb-6">${next.subject_full || 'Regular Session'}</p>
+
+                    <div class="space-y-3 relative z-10">
+                        <div class="flex items-center gap-3 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 border border-slate-700">
+                                <i class="fas fa-users text-xs"></i>
+                            </div>
+                            <span class="text-slate-300">${next.section}</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 border border-slate-700">
+                                <i class="fas fa-map-marker-alt text-xs"></i>
+                            </div>
+                            <span class="text-slate-300">${next.room}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 pt-6 border-t border-white/5">
+                        <button class="w-full btn-modern flex items-center justify-center gap-2">
+                            <span>Start Class</span>
+                            <i class="fas fa-arrow-right text-xs opacity-70"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+
+</html>

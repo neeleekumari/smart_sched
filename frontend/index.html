@@ -1,0 +1,4726 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="light-mode">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartSched AI | Intelligent Timetable Management</title>
+    <meta name="description" content="AI-Powered Timetable Generation Platform for Modern Educational Institutions" />
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%236366f1'/><text x='16' y='22' font-family='Arial' font-size='18' font-weight='bold' text-anchor='middle' fill='white'>📅</text></svg>">
+
+    <!-- Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+
+
+        /* ===== MICRO-ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Card fade-in animations */
+        .stat-card,
+        .dashboard-card,
+        .form-card,
+        .wizard-step,
+        .timetable-card {
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .stat-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .stat-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        /* Hover lift effect */
+        .stat-card,
+        .dashboard-card,
+        .form-card,
+        .timetable-card,
+        .mode-card .mode-content {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stat-card:hover,
+        .dashboard-card:hover,
+        .form-card:hover,
+        .timetable-card:hover {
+            transform: translateY(-8px);
+        }
+
+        /* Icon hover brightness */
+        .stat-icon,
+        .mode-icon,
+        .nav-link i,
+        button i {
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover .stat-icon,
+        .mode-card:hover .mode-icon,
+        .nav-link:hover i,
+        button:hover i {
+            filter: brightness(1.2);
+            transform: scale(1.1);
+        }
+
+        /* Table row hover transitions */
+        .data-table tbody tr {
+            transition: all 0.25s ease;
+        }
+
+        .data-table tbody tr:hover {
+            transform: translateX(4px);
+        }
+
+        /* Button hover glow */
+        .btn,
+        .tab-btn,
+        .quick-actions .btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn:hover,
+        .tab-btn:hover {
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .light-mode .btn:hover,
+        .light-mode .tab-btn:hover {
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Section slide-in */
+        .section.active {
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        /* Smooth transitions for theme toggle */
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Prevent transition on page load */
+        .no-transition * {
+            transition: none !important;
+        }
+
+        /* ===== COMPREHENSIVE FORM ELEMENT VISIBILITY FIXES ===== */
+
+        /* ALL inputs, selects, textareas in DARK mode */
+        input.form-input,
+        select.form-input,
+        textarea.form-input {
+            background: rgba(255, 255, 255, 0.04) !important;
+            border: 2px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+        }
+
+        input.form-input::placeholder,
+        textarea.form-input::placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+        }
+
+        /* ALL inputs, selects, textareas in LIGHT mode */
+        .light-mode input.form-input,
+        .light-mode select.form-input,
+        .light-mode textarea.form-input {
+            background: white !important;
+            border: 2px solid rgba(0, 0, 0, 0.1) !important;
+            color: #1a1a2e !important;
+        }
+
+        .light-mode input.form-input::placeholder,
+        .light-mode textarea.form-input::placeholder {
+            color: rgba(26, 26, 46, 0.5) !important;
+        }
+
+        /* Dropdown options - DARK mode */
+        select.form-input option,
+        select option {
+            background: #1a1f3a !important;
+            color: white !important;
+            padding: 0.5rem !important;
+        }
+
+        /* Dropdown options - LIGHT mode */
+        .light-mode select.form-input option,
+        .light-mode select option {
+            background: white !important;
+            color: #1a1a2e !important;
+            padding: 0.5rem !important;
+        }
+
+        /* Focus states */
+        input.form-input:focus,
+        select.form-input:focus,
+        textarea.form-input:focus {
+            border-color: var(--neon-blue) !important;
+            color: white !important;
+        }
+
+        .light-mode input.form-input:focus,
+        .light-mode select.form-input:focus,
+        .light-mode textarea.form-input:focus {
+            border-color: #00f2ff !important;
+            color: #1a1a2e !important;
+        }
+
+        /* ===== ENHANCED SPACING & TYPOGRAPHY ===== */
+        .container {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                padding-left: 3rem;
+                padding-right: 3rem;
+            }
+        }
+
+        /* Better line heights */
+        p {
+            line-height: 1.7;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            line-height: 1.3;
+        }
+
+        /* ===== ADDITIONAL VISIBILITY FIXES ===== */
+        /* Fix all text in dark mode */
+        .section h1,
+        .section h2,
+        .section h3,
+        .section h4,
+        .section h5,
+        .section h6,
+        .section p,
+        .section label,
+        .section span {
+            color: inherit;
+        }
+
+        /* Ensure buttons are always visible */
+        button {
+            opacity: 1 !important;
+        }
+
+        /* Fix icon colors in buttons */
+        button i {
+            opacity: 1;
+        }
+
+        .light-mode button i {
+            opacity: 1;
+        }
+
+        /* Fix table borders in light mode */
+        .light-mode .data-table {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .light-mode .data-table tbody tr {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Fix text visibility in light mode */
+        .light-mode .mode-details h4,
+        .light-mode .section-selector label,
+        .light-mode .break-input-header h5 {
+            color: #1a1a2e !important;
+        }
+
+        .light-mode .mode-details p,
+        .light-mode small {
+            color: rgba(0, 0, 0, 0.6) !important;
+        }
+
+        /* Ensure all SVG icons are visible */
+        svg {
+            opacity: 1;
+        }
+
+        .light-mode svg {
+            opacity: 1;
+        }
+
+        /* Fix timetables stats */
+        .light-mode .stat-pill {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .light-mode .stat-pill label {
+            color: rgba(0, 0, 0, 0.7) !important;
+        }
+
+        /* Fix config section backgrounds */
+        .light-mode .config-section,
+        .light-mode .checkbox-card,
+        .light-mode .mode-content {
+            background: white;
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .light-mode .checkbox-card:hover {
+            border-color: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .light-mode .mode-card input[type="radio"]:checked+.mode-content {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: var(--neon-purple);
+        }
+    </style>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Vibrant Color System */
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+
+            /* Neon Accents */
+            --neon-blue: #00f2fe;
+            --neon-purple: #667eea;
+            --neon-pink: #f5576c;
+            --neon-green: #38f9d7;
+
+            /* Glass Morphism */
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.18);
+
+            /* Shadows */
+            --shadow-glow: 0 0 40px rgba(102, 126, 234, 0.4);
+            --shadow-mega: 0 30px 90px rgba(0, 0, 0, 0.25);
+
+            /* Spacing */
+            --spacing-unit: 8px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0d0d0d;
+            /* Premium matte black */
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Light mode overrides - Clean and vibrant */
+        .light-mode body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+            color: #1a1a2e;
+        }
+
+        /* Hide default background when login is visible */
+        body:has(#login:not([style*="display: none"])) {
+            background: transparent;
+        }
+
+        .light-mode .cosmic-background {
+            background: linear-gradient(135deg, #f8f7ff 0%, #f0edff 50%, #e8e4ff 100%) !important;
+        }
+
+        .light-mode .star {
+            background: #5e5a8c;
+            opacity: 0.3;
+            box-shadow: 0 0 3px rgba(94, 90, 140, 0.4);
+        }
+
+        .light-mode .shape {
+            opacity: 0.15;
+            filter: blur(80px);
+        }
+
+        .light-mode .shape-1 {
+            background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
+        }
+
+        .light-mode .shape-2 {
+            background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+        }
+
+        .light-mode .shape-3 {
+            background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
+        }
+
+        .light-mode .grid-overlay {
+            background-image:
+                linear-gradient(rgba(139, 92, 246, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.08) 1px, transparent 1px);
+        }
+
+        /* ===== ANIMATED BACKGROUND (NEW WAVE DESIGN - LOGIN PAGE ONLY) ===== */
+        .cosmic-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background-color: #0a0a12;
+            transition: background 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Show wave background only when login is visible */
+        body:has(#login:not([style*="display: none"])) .cosmic-background {
+            opacity: 1;
+        }
+
+        .shapes-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: floatlong 20s infinite ease-in-out;
+            opacity: 0.15;
+        }
+
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--neon-purple);
+            top: -200px;
+            left: -200px;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--neon-blue);
+            top: 50%;
+            right: -150px;
+            animation-delay: 5s;
+        }
+
+        .shape-3 {
+            width: 500px;
+            height: 500px;
+            background: var(--neon-pink);
+            bottom: -250px;
+            left: 30%;
+            animation-delay: 10s;
+        }
+
+        @keyframes floatlong {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(50px, -50px) rotate(120deg);
+            }
+
+            66% {
+                transform: translate(-50px, 50px) rotate(240deg);
+            }
+        }
+
+
+
+        /* Canvas for wave animation */
+        #canvas-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* --- MODE 2: CANVAS ANIMATION FOR INSIDE PAGES --- */
+        #waveCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            pointer-events: none;
+        }
+
+        /* Show wave canvas only when main content is visible */
+        body:has(.main-content:not([style*="display: none"])) #waveCanvas {
+            opacity: 1;
+        }
+
+
+
+
+
+        /* ===== THEME TOGGLE ===== */
+        .theme-toggle {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 9999;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--glass-border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(180deg);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .theme-toggle i {
+            font-size: 24px;
+            color: var(--neon-blue);
+            transition: all 0.3s ease;
+        }
+
+        /* ===== LOGIN PAGE ===== */
+        .login-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .glass-card {
+            width: 100%;
+            max-width: 980px;
+            background: rgba(255, 255, 255, 0.03);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            animation: slideUp 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+            border-color: rgba(0, 242, 255, 0.3);
+        }
+
+        .light-mode .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            backdrop-filter: blur(30px) saturate(180%);
+            border: 2px solid rgba(0, 242, 255, 0.3);
+            box-shadow:
+                0 25px 70px rgba(0, 242, 255, 0.25),
+                0 10px 40px rgba(102, 126, 234, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.98);
+        }
+
+        .light-mode .glass-card:hover {
+            border-color: rgba(0, 242, 255, 0.5);
+            transform: translateY(-5px);
+            box-shadow:
+                0 30px 90px rgba(0, 242, 255, 0.35),
+                0 15px 50px rgba(102, 126, 234, 0.25),
+                0 0 40px rgba(0, 242, 255, 0.15);
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+            animation: shimmer 3s infinite;
+            transform: translateX(-100%);
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        @keyframes slideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(60px) scale(0.98);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .login-brand {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .brand-icon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 90px;
+            height: 90px;
+            margin-bottom: 1rem;
+            animation: floatmini 3s ease-in-out infinite;
+        }
+
+        @keyframes floatmini {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .brand-icon i {
+            font-size: 40px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 16px rgba(102, 126, 234, 0.5));
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        .icon-glow {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            opacity: 0.16;
+            filter: blur(30px);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                transform: scale(0.8);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.55;
+            }
+        }
+
+        .login-title {
+            font-size: 2.5rem;
+            font-weight: 200;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #fff, #a5a5a5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+
+        /* Light mode login page styles */
+        .light-mode .login-title {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0891b2 50%, #00f2ff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 8px rgba(0, 242, 255, 0.25));
+        }
+
+        .light-mode .brand-icon {
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .light-mode .brand-icon i {
+            background: linear-gradient(135deg, #0891b2 0%, #00f2ff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 8px rgba(0, 242, 255, 0.3));
+        }
+
+        .light-mode .icon-glow {
+            display: none;
+        }
+
+        .light-mode .ai-badge {
+            box-shadow: 0 4px 20px rgba(0, 242, 255, 0.4);
+            color: #000000 !important;
+            font-weight: 900 !important;
+        }
+
+        .light-mode .user-toggle .btn--primary {
+            background: linear-gradient(135deg, #0891b2 0%, #00f2ff 100%);
+            box-shadow: 0 6px 25px rgba(0, 242, 255, 0.35);
+        }
+
+        .light-mode .user-toggle .btn--secondary {
+            background: rgba(0, 242, 255, 0.08);
+            color: #0891b2;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+        }
+
+        /* Light mode - simplified to match dark mode structure */
+        .light-mode .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .light-mode .stat-card,
+        .light-mode .dashboard-card,
+        .light-mode .wizard-step,
+        .light-mode .form-card,
+        .light-mode .timetable-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .light-mode .nav-link {
+            color: #1a1a2e;
+        }
+
+        .light-mode .nav-link:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .light-mode .nav-link.active {
+            background: var(--primary-gradient);
+            color: white !important;
+        }
+
+        .light-mode .nav-link.active i {
+            color: white !important;
+        }
+
+        .light-mode .form-input {
+            background: white !important;
+            border: 2px solid rgba(0, 0, 0, 0.1) !important;
+            color: #1a1a2e !important;
+        }
+
+        .light-mode .form-input::placeholder {
+            color: rgba(26, 26, 46, 0.65) !important;
+        }
+
+        .light-mode .form-input:focus {
+            background: rgba(255, 255, 255, 1) !important;
+            border-color: #00f2ff !important;
+            box-shadow: 0 0 0 4px rgba(0, 242, 255, 0.15), 0 8px 30px rgba(0, 242, 255, 0.25) !important;
+            color: #1a1a2e !important;
+        }
+
+        /* Fix select dropdowns in light mode */
+        .light-mode select.form-input {
+            background: rgba(255, 255, 255, 0.95) !important;
+            color: #1a1a2e !important;
+        }
+
+        .light-mode select.form-input option {
+            background: white !important;
+            color: #1a1a2e !important;
+        }
+
+        /* Fix textarea in light mode */
+        .light-mode textarea.form-input {
+            background: rgba(255, 255, 255, 0.95) !important;
+            color: #1a1a2e !important;
+        }
+
+        /* Fix select dropdowns in dark mode */
+        select.form-input {
+            background: rgba(255, 255, 255, 0.04) !important;
+            color: white !important;
+        }
+
+        select.form-input option {
+            background: #1a1f3a !important;
+            color: white !important;
+        }
+
+        /* Fix multi-select in dark mode */
+        select[multiple].form-input option {
+            background: #1a1f3a !important;
+            color: white !important;
+            padding: 0.5rem;
+        }
+
+        select[multiple].form-input option:checked {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+        }
+
+        /* Fix multi-select in light mode */
+        .light-mode select[multiple].form-input option {
+            background: white !important;
+            color: #1a1a2e !important;
+        }
+
+        .light-mode select[multiple].form-input option:checked {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%) !important;
+            color: white !important;
+        }
+
+        .light-mode .data-table thead th {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .light-mode .data-table tbody tr:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .light-mode .tab-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .light-mode .stat-pill span {
+            background: linear-gradient(135deg, #5b21b6 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+
+        .light-mode .stat-pill label {
+            color: rgba(91, 33, 182, 0.7);
+            font-weight: 700;
+        }
+
+        .light-mode .logo-preview {
+            background: rgba(139, 92, 246, 0.05);
+            border: 2px dashed rgba(139, 92, 246, 0.25);
+        }
+
+        .light-mode .logo-preview:hover {
+            border-color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.1);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.2);
+        }
+
+        .light-mode .logo-preview-box i {
+            color: rgba(139, 92, 246, 0.4);
+        }
+
+        .light-mode .logo-preview-box small {
+            color: rgba(91, 33, 182, 0.5);
+        }
+
+        .light-mode .modal-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 247, 255, 0.98) 100%);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 25px 80px rgba(139, 92, 246, 0.35), 0 0 60px rgba(99, 102, 241, 0.2);
+        }
+
+        .light-mode .modal-content h3 {
+            background: linear-gradient(135deg, #5b21b6 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .light-mode .modal-content h2 {
+            color: #1a1a2e;
+        }
+
+        .light-mode .modal-content label {
+            color: #1a1a2e;
+        }
+
+        .light-mode .modal .close {
+            color: #5b21b6;
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .light-mode .modal .close:hover {
+            background: rgba(255, 71, 87, 0.15);
+            color: #dc2626;
+        }
+
+        .light-mode .layout-option {
+            background: rgba(139, 92, 246, 0.06);
+            border: 1px solid rgba(139, 92, 246, 0.2) !important;
+            color: #1a1a2e;
+            font-weight: 600;
+        }
+
+        .light-mode .layout-option:hover {
+            background: rgba(139, 92, 246, 0.12);
+            border-color: rgba(139, 92, 246, 0.35) !important;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .light-mode .empty-state h3 {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .light-mode .empty-state p {
+            color: rgba(91, 33, 182, 0.6);
+        }
+
+        .light-mode .empty-state i {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(99, 102, 241, 0.3) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .light-mode .logo-icon {
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .light-mode .logo-icon i {
+            background: linear-gradient(135deg, #5b21b6 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(91, 33, 182, 0.2));
+        }
+
+        .light-mode .logo-text {
+            background: linear-gradient(135deg, #1a1a2e 0%, #5b21b6 50%, #6366f1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .light-mode .logo-ai {
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+            color: #000000 !important;
+            font-weight: 900 !important;
+        }
+
+        .light-mode .user-display {
+            background: rgba(139, 92, 246, 0.08);
+            color: #1a1a2e;
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            font-weight: 700;
+        }
+
+        .light-mode .btn-outline {
+            border: 2px solid rgba(0, 242, 255, 0.4);
+            color: #0891b2;
+            background: rgba(0, 242, 255, 0.05);
+        }
+
+        .light-mode .btn-outline:hover {
+            background: rgba(0, 242, 255, 0.15);
+            border-color: #00f2ff;
+            box-shadow: 0 6px 25px rgba(0, 242, 255, 0.3);
+        }
+
+        .light-mode .tab-btn {
+            background: rgba(255, 255, 255, 0.95);
+            color: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+        }
+
+        .light-mode .tab-btn:hover {
+            color: #5b21b6;
+            background: rgba(139, 92, 246, 0.12);
+            border-color: rgba(139, 92, 246, 0.25);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
+        }
+
+        .light-mode .tab-btn.active {
+            background: linear-gradient(135deg, #6f5c9b 0%, #4b4ca2 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Tab Content Visibility */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .light-mode .form-card .card-title {
+            color: #1a1a2e !important;
+            font-weight: 800;
+        }
+
+        .light-mode .form-card .card-title::before {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+        }
+
+        /* Fix all headings in light mode */
+        .light-mode h1,
+        .light-mode h2,
+        .light-mode h3,
+        .light-mode h4,
+        .light-mode h5,
+        .light-mode h6 {
+            color: #1a1a2e;
+        }
+
+        /* Fix all labels in light mode */
+        .light-mode label {
+            color: #1a1a2e !important;
+        }
+
+        /* Fix all paragraphs in light mode */
+        .light-mode p {
+            color: rgba(26, 26, 46, 0.85);
+        }
+
+        /* Fix dashboard card headings */
+        .light-mode .dashboard-card h3 {
+            color: #1a1a2e !important;
+        }
+
+        .light-mode .dashboard-card h3 i {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .light-mode .input-icon {
+            color: #00f2ff !important;
+        }
+
+        /* Fix course selector in light mode */
+        .light-mode .course-selector label {
+            color: #1a1a2e !important;
+        }
+
+        .light-mode .course-selector label i {
+            color: #0891b2 !important;
+        }
+
+        .light-mode .course-multi {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border: 2px solid rgba(139, 92, 246, 0.25) !important;
+            color: #1a1a2e !important;
+        }
+
+        .light-mode .course-multi option {
+            background: white !important;
+            color: #1a1a2e !important;
+            border-color: rgba(139, 92, 246, 0.15);
+        }
+
+        .light-mode .course-multi option:checked {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%) !important;
+            color: white !important;
+        }
+
+        /* Fix course multi in dark mode */
+        .course-multi {
+            background: rgba(255, 255, 255, 0.04) !important;
+            border: 2px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+        }
+
+        .course-multi option {
+            background: #1a1f3a !important;
+            color: white !important;
+        }
+
+        .course-multi option:checked {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+        }
+
+        /* Fix info grid labels */
+        .light-mode .info-grid .form-group label {
+            color: #1a1a2e !important;
+        }
+
+        .light-mode .info-grid .form-group label i {
+            color: #0891b2 !important;
+        }
+
+        .light-mode .progress-bar {
+            background: rgba(139, 92, 246, 0.12);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .light-mode .progress-fill {
+            background: linear-gradient(90deg, #8b5cf6, #6366f1);
+        }
+
+        .light-mode .alert-info {
+            background: rgba(139, 92, 246, 0.08);
+            color: #5b21b6;
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .light-mode .data-table tbody td button {
+            background: rgba(139, 92, 246, 0.08);
+            color: #5b21b6 !important;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            font-weight: 600;
+        }
+
+        .light-mode .data-table tbody td button:hover {
+            background: rgba(139, 92, 246, 0.15);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+            color: #5b21b6 !important;
+        }
+
+        .light-mode .data-table tbody td button i {
+            color: #5b21b6 !important;
+        }
+
+        /* Fix button visibility in dark mode */
+        .data-table tbody td button {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .data-table tbody td button i {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .light-mode .step-number {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        .light-mode .step-info h3 {
+            color: #1a1a2e !important;
+            font-weight: 900;
+        }
+
+        .light-mode .step-info p {
+            color: rgba(91, 33, 182, 0.7) !important;
+            font-weight: 600;
+        }
+
+        /* Fix config section headings */
+        .light-mode .config-section h4 {
+            color: #1a1a2e !important;
+        }
+
+        .light-mode .config-section h4 i {
+            color: #0891b2 !important;
+        }
+
+        /* Fix checkbox card text */
+        .light-mode .checkbox-content {
+            color: rgba(26, 26, 46, 0.85) !important;
+        }
+
+        .light-mode .checkbox-content strong {
+            color: #1a1a2e !important;
+        }
+
+        .light-mode .checkbox-content p {
+            color: rgba(91, 33, 182, 0.6) !important;
+        }
+
+        /* Fix hint box in light mode */
+        .light-mode .hint-box {
+            background: rgba(139, 92, 246, 0.08);
+            border-left-color: #8b5cf6;
+        }
+
+        .light-mode .hint-box i {
+            color: #8b5cf6 !important;
+        }
+
+        .light-mode .hint-box span {
+            color: rgba(91, 33, 182, 0.8) !important;
+        }
+
+        /* Fix alert box in light mode */
+        .light-mode .alert-box strong {
+            color: #1a1a2e !important;
+        }
+
+        .light-mode .alert-box p {
+            color: rgba(26, 26, 46, 0.75) !important;
+        }
+
+        .light-mode .mode-content {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.12);
+        }
+
+        .light-mode .mode-card:hover .mode-content {
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.25);
+        }
+
+        .light-mode .mode-card input[type="radio"]:checked+.mode-content {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.12) 0%, rgba(99, 102, 241, 0.12) 100%);
+            border-color: #8b5cf6;
+            box-shadow: 0 8px 35px rgba(139, 92, 246, 0.35);
+        }
+
+        .light-mode .mode-icon {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+        }
+
+        .light-mode .mode-details h4 {
+            color: #1a1a2e;
+            font-weight: 800;
+        }
+
+        .light-mode .mode-details p {
+            color: rgba(91, 33, 182, 0.7);
+        }
+
+        .light-mode .mode-badge {
+            background: rgba(139, 92, 246, 0.15);
+            color: #5b21b6;
+            border: 1px solid rgba(139, 92, 246, 0.25);
+        }
+
+        /* Light mode text colors for section descriptions */
+        .light-mode section p[style*="color:rgba(255,255,255"] {
+            color: rgba(91, 33, 182, 0.7) !important;
+        }
+
+        .light-mode .generate-actions .btn-large {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 12px 45px rgba(16, 185, 129, 0.4);
+            font-size: 1.1rem;
+            padding: 1.25rem 2.5rem;
+        }
+
+        .light-mode .generate-actions .btn-large:hover {
+            box-shadow: 0 18px 60px rgba(16, 185, 129, 0.5);
+        }
+
+        .ai-badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 900 !important;
+            margin-left: 0.5rem;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .login-sub {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 2rem;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .light-mode .login-sub {
+            color: rgba(26, 26, 46, 0.75);
+            font-weight: 400;
+        }
+
+        .user-toggle {
+            display: flex;
+            gap: 0.75rem;
+            margin: 1rem 0 1.25rem 0;
+            justify-content: center;
+        }
+
+        .user-toggle .btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .user-toggle .btn--primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .user-toggle .btn--secondary {
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .user-toggle .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: 0.5px;
+        }
+
+        .light-mode .form-group label {
+            color: rgba(26, 26, 46, 0.9);
+        }
+
+        .input-icon-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+            color: var(--neon-blue);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.9rem 1rem 0.9rem 3rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(8px);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .light-mode .form-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            color: #1a1a2e;
+        }
+
+        .light-mode .form-input::placeholder {
+            color: rgba(26, 26, 46, 0.5);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow:
+                0 0 0 4px rgba(0, 242, 254, 0.06),
+                0 8px 32px rgba(0, 242, 254, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .flex-end {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.9rem 1.25rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #581c87 0%, #6b21a8 50%, #86198f 100%);
+            /* Even darker purple-pink gradient */
+            border: 1px solid rgba(134, 25, 143, 0.5);
+            color: #ffffff;
+            box-shadow: 0 8px 30px rgba(88, 28, 135, 0.5);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #6b21a8 0%, #7e22ce 50%, #a21caf 100%);
+            /* Slightly lighter on hover */
+            color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(107, 33, 168, 0.6);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: var(--neon-blue);
+            transform: translateY(-3px);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 2px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:hover {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        /* ===== NAVIGATION ===== */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .light-mode .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: var(--primary-gradient);
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.5);
+            animation: floatmini 3s ease-in-out infinite;
+        }
+
+        .logo-icon i {
+            font-size: 1.2rem;
+            color: white;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, var(--neon-blue) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .logo-ai {
+            display: inline-block;
+            font-weight: 900 !important;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 8px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+            box-shadow: 0 2px 10px rgba(245, 87, 108, 0.4);
+            text-shadow: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            padding: 0.6rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .light-mode .nav-link {
+            color: rgba(26, 26, 46, 0.85);
+        }
+
+        .light-mode .nav-link:hover {
+            color: #1a1a2e;
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--neon-blue);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .nav-link:hover::before {
+            width: 80%;
+        }
+
+        .nav-link.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-auth {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .user-area,
+        .guest-area {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .user-display {
+            color: white;
+            font-weight: 600;
+            padding: 0.4rem 0.9rem;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            min-height: calc(100vh - 80px);
+            padding: 3rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-content::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 300px;
+            background: radial-gradient(circle at top center, rgba(102, 126, 234, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+            /* Above animated paths */
+        }
+
+        .section {
+            display: none;
+            position: relative;
+            z-index: 10;
+            /* Above animated paths */
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, var(--neon-purple) 50%, var(--neon-blue) 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 3rem;
+            letter-spacing: -2px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1.5rem;
+            animation: gradientShift 8s ease infinite;
+            filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.6));
+        }
+
+        @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.8);
+        }
+
+        /* Light mode - keep the SAME gradient and glow effect */
+        .light-mode .section-title {
+            background: linear-gradient(135deg, #fff 0%, var(--neon-purple) 50%, var(--neon-blue) 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.6));
+            animation: gradientShift 8s ease infinite;
+        }
+
+        /* ===== STATS GRID ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.75rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.25rem;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.3);
+            /* Subtle white glow border */
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .light-mode .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 0 40px rgba(100, 100, 100, 0.08), 0 4px 20px rgba(0, 0, 0, 0.08);
+            /* Subtle grey glow border */
+        }
+
+        .stat-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow:
+                0 25px 50px rgba(102, 126, 234, 0.25),
+                0 0 60px rgba(102, 126, 234, 0.15);
+            border-color: rgba(102, 126, 234, 0.4);
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-card:nth-child(1)::before {
+            background: var(--primary-gradient);
+        }
+
+        .stat-card:nth-child(2)::before {
+            background: var(--success-gradient);
+        }
+
+        .stat-card:nth-child(3)::before {
+            background: var(--info-gradient);
+        }
+
+        .stat-card:nth-child(4)::before {
+            background: var(--secondary-gradient);
+        }
+
+        .stat-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background: var(--primary-gradient);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.35);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.5);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 15px 50px rgba(102, 126, 234, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 15px 60px rgba(102, 126, 234, 0.7);
+            }
+        }
+
+        .stat-card:nth-child(1) .stat-icon {
+            background: var(--primary-gradient);
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            background: var(--success-gradient);
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            background: var(--info-gradient);
+        }
+
+        .stat-card:nth-child(4) .stat-icon {
+            background: var(--secondary-gradient);
+        }
+
+        .stat-content {
+            width: 100%;
+        }
+
+        .stat-content h3 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 0.25rem;
+            background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.8) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-content p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .light-mode .stat-content h3 {
+            background: linear-gradient(135deg, #5b21b6 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+
+        .light-mode .stat-content p {
+            color: rgba(91, 33, 182, 0.8);
+            font-weight: 700;
+        }
+
+        /* ===== DASHBOARD CARDS ===== */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        .dashboard-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.3);
+            /* Subtle white glow border */
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .dashboard-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .dashboard-card h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .dashboard-card h3 i {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .light-mode .dashboard-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .quick-actions .btn {
+            padding: 1.5rem 1.75rem;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .quick-actions .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .quick-actions .btn:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .quick-actions .btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+        }
+
+        .btn-success {
+            background: var(--success-gradient);
+            box-shadow: 0 8px 30px rgba(67, 233, 123, 0.18);
+        }
+
+        .btn-info {
+            background: var(--info-gradient);
+            box-shadow: 0 8px 30px rgba(79, 172, 254, 0.18);
+        }
+
+        .light-mode .quick-actions .btn {
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.35), 0 4px 20px rgba(99, 102, 241, 0.25);
+        }
+
+        .light-mode .quick-actions .btn:hover {
+            box-shadow: 0 18px 55px rgba(139, 92, 246, 0.45), 0 8px 30px rgba(99, 102, 241, 0.35);
+        }
+
+        .light-mode .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.35);
+        }
+
+        .light-mode .btn-success:hover {
+            box-shadow: 0 18px 55px rgba(16, 185, 129, 0.45);
+        }
+
+        .light-mode .btn-info {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            box-shadow: 0 12px 40px rgba(6, 182, 212, 0.35);
+        }
+
+        .light-mode .btn-info:hover {
+            box-shadow: 0 18px 55px rgba(6, 182, 212, 0.45);
+        }
+
+        /* Merge of old functional styles that are not in the new CSS:
+           Keep basic table styling for data tables used in Data Management and Sections.
+        */
+        .data-table-container {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: transparent;
+            overflow: hidden;
+            min-width: 750px;
+        }
+
+        /* Light mode data table container */
+        .light-mode .data-table-container {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        .data-table thead th {
+            text-align: left;
+            font-weight: 700;
+            padding: 1.25rem 1.5rem;
+            font-size: 0.85rem;
+            color: white;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .data-table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(102, 126, 234, 0.08);
+            transform: scale(1.005);
+        }
+
+        .data-table tbody td {
+            padding: 1.25rem 1.5rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.95rem;
+        }
+
+        .data-table tbody td button {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+
+        .light-mode .data-table thead th {
+            color: #1a1a2e;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%);
+            border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+            font-weight: 700;
+        }
+
+        .light-mode .data-table tbody tr:hover {
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .light-mode .data-table tbody td {
+            color: #1a1a2e;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+            font-weight: 500;
+        }
+
+        .data-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(102, 126, 234, 0.08);
+            border-radius: 16px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .light-mode .data-header {
+            background: ghostwhite;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .data-header h3 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: rgba(248, 247, 255, 0.98);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tab-btn {
+            padding: 0.85rem 1.75rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            margin-right: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--primary-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .tab-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-btn:hover {
+            color: white;
+            transform: translateY(-2px);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #6f5c9b 0%, #4b4ca2 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
+            transform: translateY(-2px);
+        }
+
+        /* Semester Filter Card */
+        .semester-filter-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .light-mode .semester-filter-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        .semester-filter {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .semester-filter label {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            white-space: nowrap;
+        }
+
+        .light-mode .semester-filter label {
+            color: #1a1a2e;
+        }
+
+        .semester-filter select {
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .semester-indicator {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            padding: 0.75rem 1.25rem;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .light-mode .semester-indicator {
+            color: rgba(0, 0, 0, 0.7);
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .semester-indicator i {
+            margin-right: 0.5rem;
+            color: var(--neon-blue);
+        }
+
+        /* Data tabs container */
+        .data-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
+            /* Above animated paths */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .form-card:hover {
+            border-color: rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transform: translateY(-4px);
+        }
+
+        .form-card .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .form-card .card-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+        }
+
+        .light-mode .form-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .hidden-input {
+            display: none;
+        }
+
+        /* ===== GENERATE TIMETABLE WIZARD STYLES ===== */
+        .generate-wizard {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .wizard-step {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .wizard-step:hover {
+            border-color: rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transform: translateY(-4px);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .step-number {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
+            flex-shrink: 0;
+        }
+
+        .step-info h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-info p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+        }
+
+        .mode-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .mode-card {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .mode-card input[type="radio"] {
+            display: none;
+        }
+
+        .mode-content {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .mode-card:hover .mode-content {
+            border-color: rgba(102, 126, 234, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.2);
+        }
+
+        .mode-card input[type="radio"]:checked+.mode-content {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            border-color: var(--neon-blue);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .mode-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 14px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: white;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .mode-icon.ai-enhanced {
+            background: var(--secondary-gradient);
+        }
+
+        .ai-badge-small {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            color: white;
+            background: var(--neon-pink);
+            font-size: 0.6rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .mode-details h4 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .mode-details p {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .mode-badge {
+            display: inline-block;
+            background: rgba(94, 234, 212, 0.2);
+            color: var(--neon-green);
+            padding: 0.35rem 0.85rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .mode-badge.advanced {
+            background: rgba(245, 87, 108, 0.2);
+            color: var(--neon-pink);
+        }
+
+        .config-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .config-section {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 1.5rem;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .config-section.full-width {
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        .config-section h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .config-section h4 i {
+            color: var(--neon-blue);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .checkbox-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .checkbox-card:hover {
+            border-color: rgba(102, 126, 234, 0.3);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .checkbox-card input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-card input[type="checkbox"]:checked~.checkbox-content {
+            color: white;
+        }
+
+        .checkbox-card input[type="checkbox"]:checked~.checkbox-content i {
+            color: var(--neon-green);
+        }
+
+        .checkbox-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: color 0.3s ease;
+        }
+
+        .checkbox-content i {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.4);
+            transition: color 0.3s ease;
+        }
+
+        .checkbox-content strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+
+        .checkbox-content p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin: 0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-grid .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-grid .form-group label i {
+            color: var(--neon-blue);
+        }
+
+        .course-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .course-selector label {
+            font-size: 1rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .course-selector label i {
+            color: var(--neon-blue);
+        }
+
+        .course-multi {
+            min-height: 240px !important;
+            background: rgba(255, 255, 255, 0.02) !important;
+            border: 2px solid rgba(255, 255, 255, 0.06) !important;
+            padding: 1rem !important;
+        }
+
+        .course-multi option {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .course-multi option:checked {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .hint-box {
+            background: rgba(102, 126, 234, 0.08);
+            border-left: 4px solid var(--neon-blue);
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .hint-box i {
+            color: var(--neon-blue);
+            font-size: 1.1rem;
+            margin-top: 0.15rem;
+        }
+
+        .hint-box span {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .alert-box {
+            padding: 1.25rem 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .alert-box.warning {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .alert-box i {
+            color: #ffc107;
+            font-size: 1.5rem;
+        }
+
+        .alert-box strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: white;
+        }
+
+        .alert-box p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .section-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sections-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .generate-actions {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-large {
+            padding: 1.25rem 3rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-large i {
+            font-size: 1.2rem;
+        }
+
+        /* Break Input Styling */
+        .break-input-group {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .break-input-group:hover {
+            border-color: rgba(0, 242, 255, 0.2);
+            background: rgba(0, 242, 255, 0.03);
+        }
+
+        .light-mode .break-input-group {
+            background: rgba(0, 242, 255, 0.03);
+            border: 1px solid rgba(0, 242, 255, 0.15);
+        }
+
+        .light-mode .break-input-group:hover {
+            border-color: rgba(0, 242, 255, 0.3);
+            background: rgba(0, 242, 255, 0.06);
+        }
+
+        .break-input-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .break-input-header h5 {
+            color: var(--neon-blue);
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .light-mode .break-input-header h5 {
+            color: #0891b2;
+        }
+
+        .break-remove-btn {
+            background: rgba(255, 71, 87, 0.1);
+            color: #ff4757;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .break-remove-btn:hover {
+            background: rgba(255, 71, 87, 0.2);
+            transform: scale(1.05);
+        }
+
+        .break-inputs-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .break-inputs-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .period-preview-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, rgba(0, 242, 255, 0.15) 0%, rgba(67, 233, 123, 0.15) 100%);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--neon-blue);
+        }
+
+        .light-mode .period-preview-badge {
+            background: linear-gradient(135deg, rgba(0, 242, 255, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+            border-color: rgba(0, 242, 255, 0.3);
+            color: #0891b2;
+        }
+
+        /* ===== TIMETABLES SECTION STYLES ===== */
+        .timetables-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .timetables-stats {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-pill {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-pill i {
+            font-size: 1.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-pill span {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: white;
+        }
+
+        .stat-pill label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: -0.5rem;
+        }
+
+        .timetables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .timetable-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .timetable-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(102, 126, 234, 0.3);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.15);
+        }
+
+        .light-mode .timetable-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(139, 92, 246, 0.15);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.1);
+        }
+
+        .light-mode .timetable-card:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 8px 35px rgba(139, 92, 246, 0.2);
+        }
+
+        .timetable-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .timetable-card-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+            flex: 1;
+            line-height: 1.3;
+        }
+
+        .light-mode .timetable-card-header h3 {
+            color: #1a1a2e !important;
+        }
+
+        /* Fix timetable status badges */
+        .timetable-status {
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Fix empty state in light mode */
+        .light-mode .empty-state h3 {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .light-mode .empty-state p {
+            color: rgba(91, 33, 182, 0.6) !important;
+        }
+
+        /* Fix data header in light mode */
+        .light-mode .data-header h3 {
+            background: rgba(0, 0, 0, 0.85);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Fix semester indicator */
+        .light-mode #semesterIndicator {
+            color: rgba(91, 33, 182, 0.75) !important;
+        }
+
+        /* Fix all icons to be visible */
+        .light-mode i {
+            opacity: 1;
+        }
+
+        .timetable-status {
+            padding: 0.4rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .status-success {
+            background: rgba(67, 233, 123, 0.15);
+            color: #43e97b;
+            border: 1px solid rgba(67, 233, 123, 0.3);
+        }
+
+        .status-warning {
+            background: rgba(250, 176, 5, 0.15);
+            color: #fab005;
+            border: 1px solid rgba(250, 176, 5, 0.3);
+        }
+
+        .light-mode .status-success {
+            background: rgba(16, 185, 129, 0.12);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .light-mode .status-warning {
+            background: rgba(245, 158, 11, 0.12);
+            color: #d97706;
+            border: 1px solid rgba(245, 158, 11, 0.25);
+        }
+
+        .timetable-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+        }
+
+        .light-mode .meta-item {
+            color: rgba(26, 26, 46, 0.7);
+        }
+
+        .meta-item i {
+            color: var(--neon-blue);
+            font-size: 0.9rem;
+        }
+
+        .light-mode .meta-item i {
+            color: #8b5cf6;
+        }
+
+        .timetable-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .btn-action i {
+            font-size: 0.9rem;
+        }
+
+        .btn-view {
+            background: var(--primary-gradient);
+            color: white;
+            flex: 1;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-view:hover {
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .light-mode .btn-view {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .light-mode .btn-view:hover {
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.25rem;
+            border-radius: 10px;
+        }
+
+        .light-mode .btn-group {
+            background: rgba(139, 92, 246, 0.06);
+        }
+
+        .btn-export {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.6rem;
+        }
+
+        .btn-export:hover {
+            background: rgba(67, 233, 123, 0.2);
+            color: #43e97b;
+        }
+
+        .light-mode .btn-export {
+            color: rgba(26, 26, 46, 0.7);
+        }
+
+        .light-mode .btn-export:hover {
+            background: rgba(16, 185, 129, 0.15);
+            color: #059669;
+        }
+
+        .btn-regen {
+            background: rgba(79, 172, 254, 0.15);
+            color: #4facfe;
+            padding: 0.6rem;
+        }
+
+        .btn-regen:hover {
+            background: rgba(79, 172, 254, 0.25);
+        }
+
+        .light-mode .btn-regen {
+            background: rgba(6, 182, 212, 0.12);
+            color: #0891b2;
+        }
+
+        .light-mode .btn-regen:hover {
+            background: rgba(6, 182, 212, 0.2);
+        }
+
+        .btn-delete {
+            background: rgba(255, 71, 87, 0.15);
+            color: #ff4757;
+            padding: 0.6rem;
+        }
+
+        .btn-delete:hover {
+            background: rgba(255, 71, 87, 0.25);
+        }
+
+        .light-mode .btn-delete {
+            background: rgba(239, 68, 68, 0.12);
+            color: #dc2626;
+        }
+
+        .light-mode .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+        }
+
+        .logo-uploader {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo-preview {
+            width: 600px;
+            height: 150px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.02);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.55);
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logo-preview:hover {
+            border-color: var(--neon-blue);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .logo-preview-box {
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .logo-preview-box i {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            display: block;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .logo-preview-box small {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .progress-container {
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe, #667eea);
+            transition: width 0.4s;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 0.75rem;
+        }
+
+        .alert-info {
+            background: rgba(227, 242, 253, 0.06);
+            color: #eaf6ff;
+            border-left: 4px solid rgba(79, 172, 254, 0.7);
+        }
+
+        /* Modal & Toast modern styling */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(20, 20, 35, 0.98) 100%);
+            padding: 2.5rem;
+            border-radius: 24px;
+            min-width: 400px;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            color: #fff;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.7), 0 0 60px rgba(102, 126, 234, 0.15);
+            position: relative;
+            animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Custom scrollbar for modal */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.7);
+        }
+
+        /* Light mode scrollbar */
+        .light-mode .modal-content::-webkit-scrollbar-track {
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .light-mode .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.5);
+        }
+
+        .light-mode .modal-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.7);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal .close {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            cursor: pointer;
+            color: #fff;
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .modal .close:hover {
+            background: rgba(255, 71, 87, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 3000;
+            min-width: 300px;
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+            color: #fff;
+            border-radius: 16px;
+            display: none;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: toastSlideIn 0.4s ease;
+        }
+
+        @keyframes toastSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Initial visibility handled by inline styles in HTML */
+        #login {
+            display: flex;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+                letter-spacing: -1px;
+            }
+
+            .glass-card {
+                padding: 1.5rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .data-tabs {
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+
+            .tab-btn {
+                white-space: nowrap;
+            }
+
+            .form-grid-2,
+            .form-grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            .stat-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .stat-content h3 {
+                font-size: 2rem;
+            }
+
+            .navbar {
+                padding: 1rem 1.5rem;
+            }
+
+            .modal-content {
+                min-width: 90vw;
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+    </``` </head>
+
+<body>
+    <!-- Wave-Based Animated Background (Login Page Only) -->
+    <div class="cosmic-background" id="loginBackground">
+        <canvas id="canvas-bg"></canvas>
+    </div>
+
+    <!-- Canvas Fluid Animation (Inside Pages Only) -->
+    <canvas id="waveCanvas" style="display:none;"></canvas>
+
+    <!-- Theme Toggle -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">
+        <i id="themeIcon" class="fas fa-moon"></i>
+    </button>
+
+    <!-- Login Section -->
+    <section id="login" class="login-section">
+        <div class="glass-card">
+            <div class="login-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-brain"></i>
+                    <div class="icon-glow"></div>
+                </div>
+                <h1 class="login-title">
+                    SmartSched<span class="ai-badge">AI</span>
+                </h1>
+                <p class="login-sub">Intelligent Timetable Management Platform</p>
+            </div>
+
+            <div class="user-toggle">
+                <button type="button" class="btn btn--primary" id="adminToggleBtn"
+                    onclick="switchToAdmin()">Administrator</button>
+                <button type="button" class="btn btn--secondary" id="teacherToggleBtn"
+                    onclick="switchToTeacher()">Teacher</button>
+            </div>
+
+            <!-- Administrator Login Form -->
+            <form id="adminLoginForm" class="form-left" style="display: block;">
+                <div class="form-group">
+                    <label>Email</label>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon"><i class="fas fa-envelope"></i></span>
+                        <input type="email" name="email" class="form-input input-with-icon"
+                            placeholder="Enter your email" autocomplete="email" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon"><i class="fas fa-lock"></i></span>
+                        <input type="password" name="password" class="form-input input-with-icon"
+                            placeholder="Enter your password" autocomplete="current-password" required>
+                    </div>
+                </div>
+                <div class="flex-end">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="button" class="btn btn-outline" id="adminRegisterBtn">Sign up</button>
+                </div>
+            </form>
+
+            <!-- Teacher Login/Setup Form -->
+            <form id="teacherLoginForm" class="form-left" style="display: none;">
+                <div class="form-group">
+                    <label>Teacher Code / Email</label>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon"><i class="fas fa-id-card"></i></span>
+                        <input type="text" name="username" id="teacherEmail" class="form-input input-with-icon"
+                            placeholder="Enter Teacher Code or Email" autocomplete="username" required>
+                    </div>
+                    <small style="color: #666; font-size: 12px; margin-top: 5px; display: block;">
+                        Login with your unique Teacher Code or registered Email
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon"><i class="fas fa-lock"></i></span>
+                        <input type="password" name="password" id="teacherPassword" class="form-input input-with-icon"
+                            placeholder="Enter password" autocomplete="current-password" required>
+                    </div>
+                </div>
+                <div class="flex-end">
+                    <button type="submit" class="btn btn-primary" id="teacherLoginBtn">Login</button>
+                    <button type="button" class="btn btn-outline" id="teacherRegisterLink">Register</button>
+                </div>
+            </form>
+
+            <!-- Teacher Registration Form -->
+            <form id="teacherRegisterForm" class="form-left" style="display: none;">
+                <div class="form-group">
+                    <label>Salutation</label>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon"><i class="fas fa-user-tag"></i></span>
+                        <select name="salutation" id="teacherSalutation" class="form-input input-with-icon">
+                            <option value="">Select...</option>
+                            <option value="Mr.">Mr.</option>
+                            <option value="Ms.">Ms.</option>
+                            <option value="Mrs.">Mrs.</option>
+                            <option value="Dr.">Dr.</option>
+                            <option value="Prof.">Prof.</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon"><i class="fas fa-user"></i></span>
+                        <input type="text" name="full_name" id="teacherName" class="form-input input-with-icon"
+                            placeholder="e.g. Dr. John Smith" autocomplete="name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>College Email</label>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon"><i class="fas fa-envelope"></i></span>
+                        <input type="email" name="email" id="teacherRegEmail" class="form-input input-with-icon"
+                            placeholder="Enter your college email" autocomplete="email" required>
+                    </div>
+                    <small style="color: #666; font-size: 12px; margin-top: 5px; display: block;">
+                        Use your official college email address (@college.ac.in)
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon"><i class="fas fa-lock"></i></span>
+                        <input type="password" name="password" id="teacherRegPassword"
+                            class="form-input input-with-icon" placeholder="Choose a strong password"
+                            autocomplete="new-password" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <div class="input-icon-wrapper">
+                        <span class="input-icon"><i class="fas fa-lock"></i></span>
+                        <input type="password" name="confirmPassword" id="teacherRegConfirmPassword"
+                            class="form-input input-with-icon" placeholder="Confirm password"
+                            autocomplete="new-password" required>
+                    </div>
+                </div>
+                <div class="flex-end">
+                    <button type="submit" class="btn btn-primary" id="teacherRegisterBtn">Create Account</button>
+                    <button type="button" class="btn btn-outline" id="teacherBackToLogin">Back to Login</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Navigation (Hidden initially) -->
+    <nav class="navbar" style="display:none;">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <div class="logo-icon"><i class="fas fa-brain"></i></div>
+                <span class="logo-text">SmartSched<span class="logo-ai">AI</span></span>
+            </div>
+            <div class="nav-menu">
+                <a href="#dashboard" class="nav-link active" data-section="dashboard"><i
+                        class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="#data" class="nav-link" data-section="data"><i class="fas fa-database"></i> Data Management</a>
+                <a href="#generate" class="nav-link" data-section="generate"><i class="fas fa-magic"></i> Generate
+                    Timetable</a>
+                <a href="#timetables" class="nav-link" data-section="timetables"><i class="fas fa-table"></i>
+                    Timetables</a>
+            </div>
+            <div class="nav-auth">
+                <div id="userArea" class="user-area" style="display:none;">
+                    <span id="userDisplay" class="user-display"></span>
+                    <button class="btn btn-outline" id="logoutBtn">Logout</button>
+                    <button class="btn btn-danger" id="deleteAccountBtn" title="Delete Account">DELETE</button>
+                </div>
+                <div id="guestArea" class="guest-area">
+                    <button class="btn btn-outline" id="loginBtn">Login</button>
+                    <button class="btn btn-primary" id="registerBtn">Register</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content (Hidden initially) -->
+    <main class="main-content" style="display:none;">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <div class="container">
+                <h1 class="section-title">Dashboard</h1>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                        <div class="stat-content">
+                            <h3 id="teacherCount">0</h3>
+                            <p>Teachers</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-book"></i></div>
+                        <div class="stat-content">
+                            <h3 id="subjectCount">0</h3>
+                            <p>Subjects</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-content">
+                            <h3 id="sectionCount">0</h3>
+                            <p>Sections</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                        <div class="stat-content">
+                            <h3 id="timetableCount">0</h3>
+                            <p>Generated Timetables</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                        <div class="quick-actions">
+                            <button class="btn btn-primary" onclick="showSection('data')"><i class="fas fa-upload"></i>
+                                Import Data</button>
+                            <button class="btn btn-success" onclick="showSection('generate')"><i
+                                    class="fas fa-magic"></i> Generate Timetable</button>
+                            <button class="btn btn-info" onclick="showSection('timetables')"><i class="fas fa-eye"></i>
+                                View Timetables</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Management Section -->
+        <section id="data" class="section">
+            <div class="container">
+                <h1 class="section-title">Data Management</h1>
+
+                <div class="semester-filter-card">
+                    <div class="semester-filter">
+                        <label for="semesterFilter"><i class="fas fa-filter"></i> Filter by Semester:</label>
+                        <select id="semesterFilter" name="semesterFilter" class="form-input" autocomplete="off">
+                            <option value="">All Semesters</option>
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                            <option value="3">Semester 3</option>
+                            <option value="4">Semester 4</option>
+                            <option value="5">Semester 5</option>
+                            <option value="6">Semester 6</option>
+                            <option value="7">Semester 7</option>
+                            <option value="8">Semester 8</option>
+                        </select>
+                    </div>
+                    <div id="semesterIndicator" class="semester-indicator">
+                        <i class="fas fa-info-circle"></i> Currently viewing: Semester X
+                    </div>
+                </div>
+
+                <div style="margin-top:1rem;">
+                    <div class="data-tabs" style="margin-bottom:1rem;">
+                        <button class="tab-btn active" data-tab="teachers">Teachers</button>
+                        <button class="tab-btn" data-tab="subjects">Subjects</button>
+                        <button class="tab-btn" data-tab="sections">Sections</button>
+                        <button class="tab-btn" data-tab="import">Import Data</button>
+                    </div>
+
+                    <!-- Teachers Tab -->
+                    <div id="teachers-tab" class="tab-content active">
+                        <div class="data-header">
+                            <h3>Teachers</h3>
+                            <button class="btn btn-primary" onclick="showAddModal('teacher')"><i
+                                    class="fas fa-plus"></i> Add Teacher</button>
+                        </div>
+                        <div class="data-table-container">
+                            <table class="data-table" id="teachersTable">
+                                <thead>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Title</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Initials</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="teachersTableBody">
+                                    <!-- Teachers will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Subjects Tab -->
+                    <div id="subjects-tab" class="tab-content">
+                        <div class="data-header">
+                            <h3>Subjects</h3>
+                            <button class="btn btn-primary" onclick="showAddModal('subject')"><i
+                                    class="fas fa-plus"></i> Add Subject</button>
+                        </div>
+                        <div class="data-table-container">
+                            <table class="data-table" id="subjectsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Code</th>
+                                        <th>Credits</th>
+                                        <th>Type</th>
+                                        <th>Semester</th>
+                                        <th>Teacher</th>
+                                        <th>Abbreviation</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="subjectsTableBody">
+                                    <!-- Subjects will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Sections Tab -->
+                    <div id="sections-tab" class="tab-content">
+                        <div class="data-header">
+                            <h3>Sections</h3>
+                            <button class="btn btn-primary" onclick="showAddSectionModal()"><i class="fas fa-plus"></i>
+                                Add Section</button>
+                        </div>
+                        <div class="data-table-container">
+                            <table class="data-table" id="sectionsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Semester</th>
+                                        <th>Programme</th>
+                                        <th>Class Strength</th>
+                                        <th>Lecture Hall</th>
+                                        <th>Class Teacher</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sectionsTableBody">
+                                    <!-- Sections will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Import Tab -->
+                    <div id="import-tab" class="tab-content">
+                        <div class="import-section">
+                            <h3>Import Data</h3>
+                            <div class="import-options" style="display:flex; gap:1rem; flex-wrap:wrap;">
+                                <div class="import-card form-card" style="flex:1; min-width:240px;">
+                                    <h4>Import Teachers</h4>
+                                    <p>Upload Excel, CSV, or JSON file with teacher data</p>
+                                    <label for="teacherFile" class="sr-only">Upload teacher file</label>
+                                    <input type="file" id="teacherFile" name="teacherFile" accept=".xlsx,.csv,.json"
+                                        class="hidden-input" autocomplete="off">
+                                    <button class="btn btn-primary"
+                                        onclick="document.getElementById('teacherFile').click()"><i
+                                            class="fas fa-upload"></i> Choose File</button>
+                                </div>
+                                <div class="import-card form-card" style="flex:1; min-width:240px;">
+                                    <h4>Import Subjects</h4>
+                                    <p>Upload Excel, CSV, or JSON file with subject data</p>
+                                    <label for="subjectFile" class="sr-only">Upload subject file</label>
+                                    <input type="file" id="subjectFile" name="subjectFile" accept=".xlsx,.csv,.json"
+                                        class="hidden-input" autocomplete="off">
+                                    <button class="btn btn-primary"
+                                        onclick="document.getElementById('subjectFile').click()"><i
+                                            class="fas fa-upload"></i> Choose File</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Generate Timetable Section -->
+        <section id="generate" class="section">
+            <div class="container">
+                <h1 class="section-title">Generate Timetable</h1>
+                <p
+                    style="text-align:center; color:rgba(255,255,255,0.7); font-size:1.1rem; margin-top:-2rem; margin-bottom:3rem;">
+                    Configure and generate optimized timetables with AI</p>
+
+                <div class="generate-wizard">
+                    <!-- Step 1: Generation Mode Selection -->
+                    <div class="wizard-step">
+                        <div class="step-header">
+                            <div class="step-number">1</div>
+                            <div class="step-info">
+                                <h3>Choose Generation Mode</h3>
+                                <p>Select how you want to generate timetables</p>
+                            </div>
+                        </div>
+                        <div class="mode-selector">
+                            <label class="mode-card">
+                                <input type="radio" name="generationMode" value="single" checked>
+                                <div class="mode-content">
+                                    <div class="mode-icon">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </div>
+                                    <div class="mode-details">
+                                        <h4>Single Timetable</h4>
+                                        <p>Generate one timetable with standard workload (~8 hrs/teacher)</p>
+                                        <div class="mode-badge">Recommended</div>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="mode-card">
+                                <input type="radio" name="generationMode" value="multi">
+                                <div class="mode-content">
+                                    <div class="mode-icon ai-enhanced">
+                                        <i class="fas fa-calendar-week"></i>
+                                        <span class="ai-badge-small">AI</span>
+                                    </div>
+                                    <div class="mode-details">
+                                        <h4>Multi-Section Timetable</h4>
+                                        <p>AI-powered generation for multiple sections with conflict detection</p>
+                                        <div class="mode-badge advanced">Advanced</div>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Timetable Schedule Configuration -->
+                    <div class="wizard-step" id="scheduleConfigCard">
+                        <div class="step-header">
+                            <div class="step-number">2</div>
+                            <div class="step-info">
+                                <h3>Timetable Schedule Configuration</h3>
+                                <p>Define time slots, periods, days, and breaks</p>
+                            </div>
+                        </div>
+                        <div class="config-grid">
+                            <!-- Time & Period Configuration -->
+                            <div class="config-section">
+                                <h4><i class="fas fa-clock"></i> Time & Period Settings</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="startTime"><i class="fas fa-sun"></i> Start Time</label>
+                                        <input type="time" id="startTime" name="startTime" value="09:00"
+                                            class="form-input" autocomplete="off" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="endTime"><i class="fas fa-moon"></i> End Time</label>
+                                        <input type="time" id="endTime" name="endTime" value="17:00" class="form-input"
+                                            autocomplete="off" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="numPeriods"><i class="fas fa-list-ol"></i> Number of Periods</label>
+                                        <input type="number" id="numPeriods" name="numPeriods" value="8" min="1"
+                                            max="15" class="form-input" autocomplete="off" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="numDays"><i class="fas fa-calendar-week"></i> Working Days</label>
+                                        <select id="numDays" name="numDays" class="form-input" autocomplete="off"
+                                            required>
+                                            <option value="5" selected>5 Days (Mon-Fri)</option>
+                                            <option value="6">6 Days (Mon-Sat)</option>
+                                            <option value="7">7 Days (Full Week)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="hint-box" style="margin-top: 1rem;">
+                                    <i class="fas fa-robot"></i>
+                                    <span><strong>AI Auto-Distribution:</strong> The system will create exactly the
+                                        number of periods you specify. Breaks are inserted between periods and do not
+                                        count as periods. Teaching periods are distributed around breaks for optimal
+                                        scheduling.</span>
+                                </div>
+                                <div id="periodDistributionPreview"
+                                    style="margin-top: 1rem; padding: 1rem; background: rgba(0, 242, 255, 0.05); border-radius: 12px; border: 1px solid rgba(0, 242, 255, 0.2); display: none;">
+                                    <h5
+                                        style="color: var(--neon-blue); font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                        <i class="fas fa-calculator"></i> Calculated Period Duration
+                                    </h5>
+                                    <p id="periodDurationText"
+                                        style="color: rgba(255, 255, 255, 0.8); font-size: 0.95rem;"></p>
+                                </div>
+                            </div>
+
+                            <!-- Break Configuration -->
+                            <div class="config-section">
+                                <h4><i class="fas fa-coffee"></i> Break Configuration</h4>
+                                <div class="form-group">
+                                    <label for="numBreaks"><i class="fas fa-pause-circle"></i> Number of Breaks</label>
+                                    <select id="numBreaks" name="numBreaks" class="form-input" autocomplete="off">
+                                        <option value="0">No Breaks</option>
+                                        <option value="1" selected>1 Break</option>
+                                        <option value="2">2 Breaks</option>
+                                        <option value="3">3 Breaks</option>
+                                        <option value="4">4 Breaks</option>
+                                    </select>
+                                </div>
+                                <div id="breaksContainer" style="margin-top: 1rem;">
+                                    <!-- Break inputs will be dynamically added here -->
+                                </div>
+                                <div class="hint-box" style="margin-top: 1rem;">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <span>Breaks are inserted between periods and do not count as periods. For example,
+                                        if you have 6 periods and 1 break, you'll get 6 teaching periods plus 1 break
+                                        time. The system distributes teaching periods around breaks at their exact
+                                        specified times,
+                                        so actual period durations may vary to accommodate the schedule.</span>
+                                </div>
+                            </div>
+
+                            <!-- Workload Configuration -->
+                            <div class="config-section">
+                                <h4><i class="fas fa-user-clock"></i> Teacher Workload Limits</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="multiMinHours">Min Hours (Multi)</label>
+                                        <input type="number" id="multiMinHours" name="multiMinHours" value="16" min="0"
+                                            max="30" class="form-input" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="multiMaxHours">Max Hours (Multi)</label>
+                                        <input type="number" id="multiMaxHours" name="multiMaxHours" value="18" min="0"
+                                            max="30" class="form-input" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="singleTargetHours">Target Hours (Single)</label>
+                                        <input type="number" id="singleTargetHours" name="singleTargetHours" value="8"
+                                            min="0" max="15" class="form-input" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Subject Limits -->
+                            <div class="config-section">
+                                <h4><i class="fas fa-book"></i> Subject Limits</h4>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="maxTheorySubjects">Max Theory Subjects</label>
+                                        <input type="number" id="maxTheorySubjects" name="maxTheorySubjects" value="2"
+                                            min="1" max="5" class="form-input" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="maxLabSubjects">Max Lab Subjects</label>
+                                        <input type="number" id="maxLabSubjects" name="maxLabSubjects" value="1" min="0"
+                                            max="3" class="form-input" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Options -->
+                            <div class="config-section full-width">
+                                <label class="checkbox-card">
+                                    <input type="checkbox" id="requireRestTime" name="requireRestTime" checked>
+                                    <div class="checkbox-content">
+                                        <i class="fas fa-coffee"></i>
+                                        <div>
+                                            <strong>Require rest between classes</strong>
+                                            <p>Ensure faculty get breaks between consecutive sessions</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Basic Information -->
+                    <div class="wizard-step">
+                        <div class="step-header">
+                            <div class="step-number">3</div>
+                            <div class="step-info">
+                                <h3>Basic Information</h3>
+                                <p>Provide timetable details and semester info</p>
+                            </div>
+                        </div>
+                        <div class="info-grid">
+                            <div class="form-group">
+                                <label for="timetableName"><i class="fas fa-file-signature"></i> Timetable Name</label>
+                                <input type="text" id="timetableName" name="timetableName"
+                                    placeholder="e.g., CSE Sem 5 - Odd 2025" class="form-input" autocomplete="off"
+                                    required>
+                                <small
+                                    style="color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-top: 0.25rem; display: block;">
+                                    <i class="fas fa-info-circle"></i> Auto-filled based on programme & semester
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="termLabel"><i class="fas fa-calendar"></i> Term/Session</label>
+                                <input type="text" id="termLabel" name="termLabel"
+                                    placeholder="e.g., Odd Semester (July-Dec 2025)" class="form-input"
+                                    autocomplete="off" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="programmeName"><i class="fas fa-graduation-cap"></i> Programme</label>
+                                <input type="text" id="programmeName" name="programmeName"
+                                    placeholder="e.g., Computer Science Engineering" class="form-input"
+                                    autocomplete="off" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="semesterSelect"><i class="fas fa-layer-group"></i> Semester</label>
+                                <select id="semesterSelect" name="semesterSelect" class="form-input" autocomplete="off"
+                                    required>
+                                    <option value="">Choose semester...</option>
+                                    <option value="1">Semester 1</option>
+                                    <option value="2">Semester 2</option>
+                                    <option value="3">Semester 3</option>
+                                    <option value="4">Semester 4</option>
+                                    <option value="5">Semester 5</option>
+                                    <option value="6">Semester 6</option>
+                                    <option value="7">Semester 7</option>
+                                    <option value="8">Semester 8</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="wefDate"><i class="fas fa-calendar-check"></i> Effective From</label>
+                                <input type="date" id="wefDate" name="wefDate" class="form-input" autocomplete="off"
+                                    required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Course Selection -->
+                    <div class="wizard-step">
+                        <div class="step-header">
+                            <div class="step-number">4</div>
+                            <div class="step-info">
+                                <h3>Course Selection</h3>
+                                <p>Choose subjects to include in the timetable</p>
+                            </div>
+                        </div>
+                        <div class="course-selector">
+                            <label for="coursesMulti"><i class="fas fa-books"></i> Select Subjects</label>
+                            <select id="coursesMulti" class="form-input course-multi" multiple size="8"></select>
+                            <div class="hint-box">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Hold Ctrl (Windows) or Cmd (Mac) to select multiple subjects. Only subjects from
+                                    the chosen semester are listed.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5 removed: Section Selection (Multi-Mode) -->
+
+                    <!-- Step 6: Select Sections -->
+                    <div class="wizard-step" id="sectionsSelectionContainer" style="display:block;">
+                        <div class="step-header">
+                            <div class="step-number">6</div>
+                            <div class="step-info">
+                                <h3>Select Sections</h3>
+                                <p id="sectionSelectionHint">Select sections for timetable generation</p>
+                            </div>
+                        </div>
+                        <div id="sectionsCheckboxList" class="sections-checkbox-grid"
+                            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+                            <!-- Premium checkboxes will be loaded here -->
+                        </div>
+                        <div id="noSectionsMessage"
+                            style="display: none; text-align: center; padding: 3rem; color: rgba(255,255,255,0.5);">
+                            <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                            <p>No sections available. Please create sections in Data Management → Sections.</p>
+                            <button class="btn btn-primary" onclick="showSection('data'); showTab('sections')"
+                                style="margin-top: 1rem;">
+                                <i class="fas fa-plus"></i> Create Sections
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 7: Logo Upload -->
+                    <div class="wizard-step">
+                        <div class="step-header">
+                            <div class="step-number">7</div>
+                            <div class="step-info">
+                                <h3>College Logo</h3>
+                                <p>Optional: Add your institution's logo</p>
+                            </div>
+                        </div>
+                        <div class="logo-uploader" style="display: flex; gap: 1rem; align-items: center;">
+                            <label for="logoInput" class="sr-only">Upload college logo</label>
+                            <input type="file" id="logoInput" name="logoInput" accept="image/*" class="hidden-input"
+                                autocomplete="off">
+                            <div class="logo-preview" id="logoPreview" style="flex: 1;">
+                                <div class="logo-preview-box">
+                                    <i class="fas fa-image"></i>
+                                    <span>Click to upload logo</span>
+                                    <small>PNG, JPG up to 5MB</small>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline hidden" id="clearLogoBtn"
+                                style="flex-shrink: 0; height: fit-content;"><i class="fas fa-times"></i>
+                                Remove</button>
+                        </div>
+                    </div>
+
+                    <!-- Generate Actions -->
+                    <div class="generate-actions">
+                        <button class="btn btn-success btn-large" onclick="generateTimetableEnhanced()">
+                            <i class="fas fa-magic"></i>
+                            <span>Generate Timetable</span>
+                        </button>
+                        <button class="btn btn-outline" onclick="validateData()">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Validate Data</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="generationProgress" class="progress-container hidden" style="margin-top:1rem;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p id="progressText" style="color:rgba(255,255,255,0.8); margin-top:0.5rem;">Generating timetable...
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timetables Section -->
+        <!-- Timetable Design Studio Section -->
+        <section id="designStudio" class="section" style="display: none;">
+            <div id="designStudioContainer"></div>
+        </section>
+
+        <section id="timetables" class="section">
+            <div class="container">
+                <h1 class="section-title">Generated Timetables</h1>
+                <p
+                    style="text-align:center; color:rgba(255,255,255,0.7); font-size:1.1rem; margin-top:-2rem; margin-bottom:3rem;">
+                    View, export, and manage your timetables</p>
+
+                <div class="timetables-header" style="display: flex; justify-content: flex-end; margin-bottom: 2rem;">
+                    <button class="btn btn-primary" onclick="showSection('generate')">
+                        <i class="fas fa-plus"></i> Generate New
+                    </button>
+                </div>
+
+                <div class="timetables-grid" id="timetablesGrid">
+                    <!-- Timetables will be loaded here as cards -->
+                    <div class="empty-state" style="text-align:center; padding:4rem 2rem;">
+                        <i class="fas fa-calendar-times"
+                            style="font-size:4rem; color:rgba(255,255,255,0.2); margin-bottom:1.5rem;"></i>
+                        <h3 style="color:rgba(255,255,255,0.6); margin-bottom:0.5rem;">No Timetables Yet</h3>
+                        <p style="color:rgba(255,255,255,0.4); margin-bottom:2rem;">Generate your first timetable to get
+                            started</p>
+                        <button class="btn btn-primary" onclick="showSection('generate')">
+                            <i class="fas fa-magic"></i> Generate Timetable
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Layout Modal (used by layout selection) -->
+    <div id="layoutModal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width:640px;">
+            <span class="close" onclick="closeLayoutModal()">&times;</span>
+            <h3>Select a Timetable Layout</h3>
+            <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-top:1rem;">
+                <div class="layout-option" data-layout="classic" onclick="selectLayout('classic')"
+                    style="cursor:pointer;padding:1rem;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+                    Classic</div>
+                <div class="layout-option" data-layout="modern" onclick="selectLayout('modern')"
+                    style="cursor:pointer;padding:1rem;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+                    Modern</div>
+                <div class="layout-option" data-layout="minimalist" onclick="selectLayout('minimalist')"
+                    style="cursor:pointer;padding:1rem;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+                    Minimalist</div>
+                <div class="layout-option" data-layout="colorful" onclick="selectLayout('colorful')"
+                    style="cursor:pointer;padding:1rem;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+                    Colorful</div>
+                <div class="layout-option" data-layout="compact" onclick="selectLayout('compact')"
+                    style="cursor:pointer;padding:1rem;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+                    Compact</div>
+            </div>
+            <div style="margin-top:1rem; display:flex; justify-content:flex-end;">
+                <button class="btn btn-outline" onclick="closeLayoutModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Wave Animation + Theme Toggle Scripts -->
+    <script>
+        // ===== WAVE ANIMATION =====
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let waves = [];
+        let particles = [];
+
+        // Configuration
+        const config = {
+            waveCount: 5,
+            waveSpeed: 0.005,
+            particleCount: 40,
+            colors: [
+                'rgba(0, 242, 255, 0.5)',   // Cyan
+                'rgba(102, 126, 234, 0.5)', // Purple
+                'rgba(118, 75, 162, 0.5)'   // Violet
+            ]
+        };
+
+        // Mouse interaction
+        let mouse = { x: 0, y: 0 };
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            init();
+        }
+
+        class Wave {
+            constructor(index, total) {
+                this.index = index;
+                this.total = total;
+                this.phase = Math.random() * Math.PI * 2;
+                this.amplitude = 50 + Math.random() * 100;
+                this.frequency = 0.002 + Math.random() * 0.003;
+                this.speed = config.waveSpeed + Math.random() * 0.002;
+                this.color = config.colors[Math.floor(Math.random() * config.colors.length)];
+                this.yBase = height / 2;
+            }
+
+            update(time) {
+                this.phase += this.speed;
+            }
+
+            draw(ctx) {
+                ctx.beginPath();
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+
+                for (let x = 0; x < width; x += 5) {
+                    let y = this.yBase + Math.sin(x * this.frequency + this.phase) * this.amplitude;
+                    y += Math.sin(x * (this.frequency * 2.5) + this.phase * 1.5) * (this.amplitude * 0.3);
+
+                    // Mouse interaction
+                    const dx = x - mouse.x;
+                    const dy = y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 200) {
+                        const force = (200 - dist) / 200;
+                        if (mouse.y < y) y += force * 30;
+                        else y -= force * 30;
+                    }
+
+                    if (x === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5;
+                this.fadeSpeed = 0.005 + Math.random() * 0.01;
+                this.color = config.colors[Math.floor(Math.random() * config.colors.length)];
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.opacity -= this.fadeSpeed;
+
+                if (this.opacity <= 0 || this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+                    this.reset();
+                    this.opacity = 0;
+                    this.fadeSpeed = -this.fadeSpeed;
+                }
+
+                if (this.opacity > 0.8) {
+                    this.fadeSpeed = Math.abs(this.fadeSpeed);
+                }
+            }
+
+            draw(ctx) {
+                ctx.fillStyle = this.color.replace('0.5)', `${Math.max(0, this.opacity)})`);
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            waves = [];
+            particles = [];
+            for (let i = 0; i < config.waveCount; i++) {
+                waves.push(new Wave(i, config.waveCount));
+            }
+            for (let i = 0; i < config.particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(10, 10, 18, 0.2)';
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.globalCompositeOperation = 'lighter';
+
+            waves.forEach(wave => {
+                wave.update();
+                wave.draw(ctx);
+            });
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw(ctx);
+            });
+
+            ctx.globalCompositeOperation = 'source-over';
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        animate();
+
+        // ===== DASHBOARD STARS GENERATION =====
+        (function generateStars() {
+            try {
+                const starsContainer = document.getElementById('starsContainer');
+                if (!starsContainer) return;
+                for (let i = 0; i < 150; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.animationDelay = Math.random() * 3 + 's';
+                    star.style.opacity = (Math.random() * 0.7 + 0.2).toString();
+                    starsContainer.appendChild(star);
+                }
+            } catch (e) {
+                console.warn('Stars init error:', e);
+            }
+        })();
+
+        // ===== THEME TOGGLE =====
+        (function initThemeToggle() {
+            const html = document.documentElement;
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const savedTheme = localStorage.getItem('theme') || 'light-mode';
+            html.className = savedTheme;
+            if (themeIcon) {
+                if (savedTheme === 'dark-mode') { themeIcon.className = 'fas fa-sun'; themeIcon.style.color = 'var(--neon-pink)'; }
+                else { themeIcon.className = 'fas fa-moon'; themeIcon.style.color = 'var(--neon-blue)'; }
+            }
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const currentTheme = html.className || 'light-mode';
+                    const newTheme = currentTheme === 'light-mode' ? 'dark-mode' : 'light-mode';
+                    html.className = newTheme;
+                    localStorage.setItem('theme', newTheme);
+                    themeToggle.style.transform = 'rotate(360deg)';
+                    setTimeout(() => { themeToggle.style.transform = 'rotate(0deg)'; }, 420);
+                    if (themeIcon) {
+                        if (newTheme === 'dark-mode') {
+                            themeIcon.className = 'fas fa-sun';
+                            themeIcon.style.color = 'var(--neon-pink)';
+                        } else {
+                            themeIcon.className = 'fas fa-moon';
+                            themeIcon.style.color = 'var(--neon-blue)';
+                        }
+                    }
+                });
+            }
+        })();
+
+        // ===== TIMETABLE SCHEDULE CONFIGURATION =====
+        (function initScheduleConfig() {
+            const numBreaksSelect = document.getElementById('numBreaks');
+            const breaksContainer = document.getElementById('breaksContainer');
+            const startTimeInput = document.getElementById('startTime');
+            const endTimeInput = document.getElementById('endTime');
+            const numPeriodsInput = document.getElementById('numPeriods');
+            const periodDistributionPreview = document.getElementById('periodDistributionPreview');
+            const periodDurationText = document.getElementById('periodDurationText');
+
+            // Initialize break inputs
+            function updateBreakInputs() {
+                const numBreaks = parseInt(numBreaksSelect.value);
+                breaksContainer.innerHTML = '';
+
+                for (let i = 0; i < numBreaks; i++) {
+                    const breakGroup = document.createElement('div');
+                    breakGroup.className = 'break-input-group';
+                    breakGroup.innerHTML = `
+                        <div class="break-input-header">
+                            <h5><i class="fas fa-coffee"></i> Break ${i + 1}</h5>
+                        </div>
+                        <div class="break-inputs-row">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="breakName${i}">Break Name</label>
+                                <input type="text" id="breakName${i}" name="breakName${i}" 
+                                    placeholder="e.g., Lunch Break" 
+                                    class="form-input" 
+                                    autocomplete="off" 
+                                    value="${getDefaultBreakName(i, numBreaks)}">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="breakStartTime${i}">Start Time</label>
+                                <input type="time" id="breakStartTime${i}" name="breakStartTime${i}" 
+                                    class="form-input" 
+                                    autocomplete="off"
+                                    value="${getDefaultBreakStartTime(i, numBreaks)}">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label for="breakDuration${i}">Duration (minutes)</label>
+                                <input type="number" id="breakDuration${i}" name="breakDuration${i}" 
+                                    min="5" max="120" 
+                                    value="${getDefaultBreakDuration(i, numBreaks)}" 
+                                    class="form-input" 
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                    `;
+                    breaksContainer.appendChild(breakGroup);
+                }
+
+                // Recalculate period duration when breaks change
+                calculatePeriodDuration();
+            }
+
+            // Get default break names based on common patterns
+            function getDefaultBreakName(index, total) {
+                const names = {
+                    0: total === 1 ? 'Lunch Break' : 'Morning Break',
+                    1: 'Lunch Break',
+                    2: 'Evening Break',
+                    3: 'Tea Break'
+                };
+                return names[index] || `Break ${index + 1}`;
+            }
+
+            // Get default break start times
+            function getDefaultBreakStartTime(index, total) {
+                const times = {
+                    0: total === 1 ? '12:30' : '11:00',
+                    1: '13:00',
+                    2: '15:30',
+                    3: '16:00'
+                };
+                return times[index] || '12:00';
+            }
+
+            // Get default break durations
+            function getDefaultBreakDuration(index, total) {
+                if (total === 1) return 45; // Single break is usually lunch
+                if (index === 1) return 45; // Lunch break
+                return 15; // Short breaks
+            }
+
+            // Calculate and display period duration
+            function calculatePeriodDuration() {
+                try {
+                    const startTime = startTimeInput.value;
+                    const endTime = endTimeInput.value;
+                    const numPeriods = parseInt(numPeriodsInput.value);
+                    const numBreaks = parseInt(numBreaksSelect.value);
+
+                    if (!startTime || !endTime || !numPeriods || numPeriods < 1) {
+                        periodDistributionPreview.style.display = 'none';
+                        return;
+                    }
+
+                    // Parse times
+                    const [startHour, startMin] = startTime.split(':').map(Number);
+                    const [endHour, endMin] = endTime.split(':').map(Number);
+
+                    // Calculate total available minutes
+                    let totalMinutes = (endHour * 60 + endMin) - (startHour * 60 + startMin);
+
+                    if (totalMinutes <= 0) {
+                        periodDurationText.innerHTML = '<span style="color: #ff4757;"><i class="fas fa-exclamation-triangle"></i> End time must be after start time</span>';
+                        periodDistributionPreview.style.display = 'block';
+                        return;
+                    }
+
+                    // Subtract break durations
+                    let totalBreakMinutes = 0;
+                    for (let i = 0; i < numBreaks; i++) {
+                        const breakDurationInput = document.getElementById(`breakDuration${i}`);
+                        if (breakDurationInput) {
+                            totalBreakMinutes += parseInt(breakDurationInput.value) || 0;
+                        }
+                    }
+
+                    const availableMinutes = totalMinutes - totalBreakMinutes;
+
+                    if (availableMinutes <= 0) {
+                        periodDurationText.innerHTML = '<span style="color: #ff4757;"><i class="fas fa-exclamation-triangle"></i> Total break time exceeds available time</span>';
+                        periodDistributionPreview.style.display = 'block';
+                        return;
+                    }
+
+                    // Calculate period duration
+                    const periodMinutes = Math.floor(availableMinutes / numPeriods);
+                    const hours = Math.floor(periodMinutes / 60);
+                    const mins = periodMinutes % 60;
+
+                    let durationText = '';
+                    if (hours > 0) {
+                        durationText = `${hours} hour${hours > 1 ? 's' : ''} ${mins} minute${mins !== 1 ? 's' : ''}`;
+                    } else {
+                        durationText = `${mins} minute${mins !== 1 ? 's' : ''}`;
+                    }
+
+                    periodDurationText.innerHTML = `
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <div class="period-preview-badge">
+                                <i class="fas fa-clock"></i>
+                                <span>Average period: <strong>${durationText}</strong></span>
+                            </div>
+                            <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">
+                                <i class="fas fa-info-circle"></i> 
+                                ${numPeriods} teaching period${numPeriods !== 1 ? 's' : ''} + ${numBreaks} break${numBreaks !== 1 ? 's' : ''} | 
+                                Total time: ${formatMinutes(totalMinutes)} | 
+                                Teaching time: ${formatMinutes(availableMinutes)}
+                            </div>
+                            <div style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.5); font-style: italic; margin-top: 0.25rem;">
+                                <i class="fas fa-lightbulb"></i> 
+                                Note: Actual periods will be distributed around breaks for optimal scheduling
+                            </div>
+                        </div>
+                    `;
+                    periodDistributionPreview.style.display = 'block';
+
+                } catch (error) {
+                    console.error('Error calculating period duration:', error);
+                    periodDistributionPreview.style.display = 'none';
+                }
+            }
+
+            // Helper function to format minutes
+            function formatMinutes(minutes) {
+                const hrs = Math.floor(minutes / 60);
+                const mins = minutes % 60;
+                if (hrs > 0) {
+                    return `${hrs}h ${mins}m`;
+                }
+                return `${mins}m`;
+            }
+
+            // Event listeners
+            if (numBreaksSelect) {
+                numBreaksSelect.addEventListener('change', updateBreakInputs);
+                updateBreakInputs(); // Initialize on load
+            }
+
+            if (startTimeInput) startTimeInput.addEventListener('change', calculatePeriodDuration);
+            if (endTimeInput) endTimeInput.addEventListener('change', calculatePeriodDuration);
+            if (numPeriodsInput) numPeriodsInput.addEventListener('input', calculatePeriodDuration);
+            if (numBreaksSelect) numBreaksSelect.addEventListener('change', calculatePeriodDuration);
+
+            // Add event listeners for break duration inputs (delegated)
+            if (breaksContainer) {
+                breaksContainer.addEventListener('input', (e) => {
+                    if (e.target.id && e.target.id.startsWith('breakDuration')) {
+                        calculatePeriodDuration();
+                    }
+                });
+            }
+
+            // Initial calculation
+            calculatePeriodDuration();
+        })();
+    </script>
+
+    <!-- Timetable Design Studio (Production-Ready) -->
+    <script src="timetable-studio.js"></script>
+
+    <!-- Main script (replace your old script.js with the version below) -->
+    <script src="script.js"></script>
+
+    <!-- Canvas Fluid Wave Animation for Inside Pages -->
+    <script>
+        // --- CANVAS ANIMATION LOGIC (The "Fluid" Mode for Inside Pages) ---
+        const waveCanvas = document.getElementById('waveCanvas');
+        const waveCtx = waveCanvas.getContext('2d');
+        let waveWidth, waveHeight;
+        let waveAnimationId = null;
+        let waveTime = 0;
+
+        function resizeWaveCanvas() {
+            waveWidth = window.innerWidth;
+            waveHeight = window.innerHeight;
+            waveCanvas.width = waveWidth;
+            waveCanvas.height = waveHeight;
+        }
+
+        window.addEventListener('resize', resizeWaveCanvas);
+        resizeWaveCanvas();
+
+        class FluidWave {
+            constructor(y, amplitude, length, speed, color) {
+                this.y = y;
+                this.amplitude = amplitude;
+                this.length = length;
+                this.speed = speed;
+                this.color = color;
+            }
+
+            draw(ctx, t) {
+                ctx.beginPath();
+                ctx.moveTo(0, this.y);
+                for (let i = 0; i < waveWidth; i++) {
+                    // Sine wave equation with time offset
+                    ctx.lineTo(i, this.y + Math.sin(i * this.length + t * this.speed) * this.amplitude);
+                }
+                ctx.lineTo(waveWidth, waveHeight);
+                ctx.lineTo(0, waveHeight);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+
+        // Configuration for the waves to match the "Classy" look
+        // Using very low opacity RGBA for overlap effect
+        const fluidWaves = [
+            new FluidWave(waveHeight * 0.5, 60, 0.003, 0.02, 'rgba(10, 25, 50, 0.5)'),   // Darkest base
+            new FluidWave(waveHeight * 0.6, 50, 0.005, 0.03, 'rgba(20, 50, 100, 0.4)'),  // Mid blue
+            new FluidWave(waveHeight * 0.7, 40, 0.007, 0.04, 'rgba(30, 80, 160, 0.2)'),  // Lighter blue
+            new FluidWave(waveHeight * 0.75, 30, 0.009, 0.05, 'rgba(0, 150, 255, 0.05)') // Highlight
+        ];
+
+        function animateWaveCanvas() {
+            // Check if light mode is active
+            const isLightMode = document.documentElement.classList.contains('light-mode');
+            waveCtx.fillStyle = isLightMode ? '#f8f9fa' : '#050a14'; // Background color based on theme
+            waveCtx.fillRect(0, 0, waveWidth, waveHeight);
+            waveTime += 1;
+            fluidWaves.forEach(wave => {
+                // Dynamic Y position adjustments for resizing
+                if (wave.y < waveHeight * 0.4) wave.y = waveHeight * 0.5;
+                wave.draw(waveCtx, waveTime);
+            });
+            waveAnimationId = requestAnimationFrame(animateWaveCanvas);
+        }
+
+        // Start animation
+        animateWaveCanvas();
+
+        // Update wave positions on resize
+        window.addEventListener('resize', () => {
+            fluidWaves[0].y = waveHeight * 0.5;
+            fluidWaves[1].y = waveHeight * 0.6;
+            fluidWaves[2].y = waveHeight * 0.7;
+            fluidWaves[3].y = waveHeight * 0.75;
+        });
+    </script>
+</body>
+
+</html>
